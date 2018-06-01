@@ -176,7 +176,7 @@
     dispatch_queue_t dispatchQueue;
     dispatchQueue = dispatch_queue_create("myQueue", NULL);
     [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
-    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObjects:AVMetadataObjectTypeQRCode,AVMetadataObjectTypeCode128Code, nil]];
+    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObjects:AVMetadataObjectTypePDF417Code,AVMetadataObjectTypeCode128Code, nil]];
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
@@ -210,6 +210,7 @@
                     CustomerReceipt *customerReceipt = [CustomerReceipt getCustomerReceiptWithReceiptID:[_arrReceiptIDScanPost[[_arrReceiptIDScanPost count]-1] integerValue]];
                     customerReceipt.trackingNo = decryptedMessage;
                     customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    customerReceipt.modifiedUser = [Utility modifiedUser];
                     [_homeModel updateItems:dbCustomerReceiptUpdateTrackingNo withData:customerReceipt];
                     [_trackingNoScanList addObject:decryptedMessage];
                     
@@ -269,7 +270,7 @@
                 }
             }
         }
-        else if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode])
+        else if ([[metadataObj type] isEqualToString:AVMetadataObjectTypePDF417Code])
         {
             NSString *error;
             NSString *decryptedMessage = [metadataObj stringValue];
@@ -292,6 +293,7 @@
                     CustomerReceipt *customerReceipt = [CustomerReceipt getCustomerReceiptWithReceiptID:[_arrReceiptIDScanPost[[_arrReceiptIDScanPost count]-1] integerValue]];
                     customerReceipt.trackingNo = decryptedMessage;
                     customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    customerReceipt.modifiedUser = [Utility modifiedUser];
                     NSLog(@"customer receipt id: %ld, tracking no: %@",customerReceipt.customerReceiptID,customerReceipt.trackingNo);
                     [_homeModel updateItems:dbCustomerReceiptUpdateTrackingNo withData:customerReceipt];
                     [_trackingNoScanList addObject:decryptedMessage];
@@ -575,15 +577,19 @@
                         
                         productInMain.status = @"S";
                         productInMain.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        productInMain.modifiedUser = [Utility modifiedUser];
                         
                         CustomMade *customMade = [Utility getCustomMade:[preOrderProduct.productID integerValue]];
                         customMade.productIDPost = productInMain.productID;
                         customMade.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        customMade.modifiedUser = [Utility modifiedUser];
+                        
                         
                         ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:postDetail.receiptProductItemID];
                         receiptProductItem.productID = productInMain.productID;
                         receiptProductItem.productType = @"R";
                         receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        receiptProductItem.modifiedUser = [Utility modifiedUser];
                         
                         [_CMScanList addObject:productInMain];
                         
@@ -843,16 +849,18 @@
 
     preOrderProduct.status = @"I";
     preOrderProduct.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
+    preOrderProduct.modifiedUser = [Utility modifiedUser];
     
     productInMain.status = @"S";
     productInMain.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    productInMain.modifiedUser = [Utility modifiedUser];
     
     
     ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:postDetail.receiptProductItemID];
     receiptProductItem.productType = @"S";
     receiptProductItem.productID = productInMain.productID;
     receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    receiptProductItem.modifiedUser = [Utility modifiedUser];
     
     [_productScanList addObject:preOrderProduct];
     
@@ -1008,6 +1016,7 @@
             customMadeProduct.size = @"00";
             customMadeProduct.manufacturingDate = @"0000-00-00";
             customMadeProduct.modifiedDate = customMade.modifiedDate;
+            customMadeProduct.modifiedUser = [Utility modifiedUser];
             customMadeProduct.productType = @"C";
 //            product.productType = @"C";///---คืออะไรไม่แน่ใจ
             [arrPreOrderProduct addObject:customMadeProduct];

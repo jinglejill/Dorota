@@ -476,6 +476,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                                 Product *productTemp = [Product getProduct:productID];
                                 productTemp.eventID = 0;
                                 productTemp.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                productTemp.modifiedUser = [Utility modifiedUser];
                                 
                                 
                                 [arrProduct addObject:productTemp];
@@ -535,6 +536,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
             {
                 item.eventID = 0;
                 item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                item.modifiedUser = [Utility modifiedUser];
                 break;
             }
         }

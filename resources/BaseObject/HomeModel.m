@@ -55,6 +55,7 @@
 #import "ProductionOrder.h"
 #import "RewardProgram.h"
 #import "PreOrderEventIDHistory.h"
+#import "EmailQRCode.h"
 
 
 #import "SharedProductSales.h"
@@ -1041,10 +1042,12 @@
             break;
         case dbProductionOrder:
         {
-            NSMutableArray *productionOrderList = (NSMutableArray *)data;
+            NSArray *dataList = (NSArray *)data;
+            NSMutableArray *productionOrderList = dataList[0];
+            Event *event = dataList[1];
             NSInteger countProductionOrder = 0;
             
-            noteDataString = [NSString stringWithFormat:@"countProductionOrder=%ld",[productionOrderList count]];
+            noteDataString = [NSString stringWithFormat:@"eventID=%ld&countProductionOrder=%ld",event.eventID,[productionOrderList count]];
             for(ProductionOrder *item in productionOrderList)
             {
                 noteDataString = [NSString stringWithFormat:@"%@&%@",noteDataString,[Utility getNoteDataString:item withRunningNo:countProductionOrder]];
@@ -1104,7 +1107,8 @@
    
         if(!error || (error && error.code == -1005))//-1005 คือ1. ตอน push notification ไม่ได้ และ2. ตอน enterbackground ตอน transaction ยังไม่เสร็จ พอ enter foreground มันจะไม่ return data มาให้
         {
-            switch (propCurrentDB) {                
+            switch (propCurrentDB)
+            {
                 case dbItemRunningID:
                 {
                     if(!dataRaw)
@@ -1212,7 +1216,23 @@
                                           options:kNilOptions error:&error];
                     NSString *status = json[@"status"];
                     NSString *returnID = json[@"returnID"];
-                    if(propCurrentDB == dbAccountReceiptInsert)
+                    NSArray *dataJson = json[@"dataJson"];
+                    NSString *strTableName = json[@"tableName"];
+                    if(propCurrentDB == dbProductSales)
+                    {
+                        if([status isEqual:@"1"] && [strTableName isEqualToString:@"ProductSales"])
+                        {
+                            NSArray *arrClassName = @[@"ProductSales"];
+                            NSArray *items = [Utility jsonToArray:dataJson arrClassName:arrClassName];
+                            
+                            
+                            if(self.delegate)
+                            {
+                                [self.delegate itemsInsertedWithReturnData:items];
+                            }
+                        }
+                    }
+                    else if(propCurrentDB == dbAccountReceiptInsert)
                     {
                         if (self.delegate)
                         {
@@ -1228,6 +1248,21 @@
                             if (self.delegate)
                             {
                                 [self.delegate itemsInsertedWithReturnID:returnID];
+                            }
+                        }
+                        else if(strTableName)
+                        {
+                            NSArray *arrClassName;
+                            if([strTableName isEqualToString:@"Event"])
+                            {
+                                arrClassName = @[@"Event"];
+                            }
+                            
+                            
+                            NSArray *items = [Utility jsonToArray:dataJson arrClassName:arrClassName];
+                            if(self.delegate)
+                            {
+                                [self.delegate itemsInsertedWithReturnData:items];
                             }
                         }
                     }
@@ -1267,7 +1302,8 @@
     propCurrentDB = currentDB;
     NSURL * url;
     NSString *noteDataString;
-    switch (currentDB) {
+    switch (currentDB)
+    {
         case dbUserAccount:
         {
             noteDataString = [Utility getNoteDataString:data];
@@ -1733,7 +1769,21 @@
             url = [NSURL URLWithString:[Utility url:urlReceiptProductItemPreOrderEventID]];
         }
             break;
-
+        case dbEmailQRCode:
+        {
+            NSArray *dataList = (NSArray *)data;
+            NSString *downloadLink = dataList[0];
+            NSArray *emailQRCodeList = dataList[1];
+            NSInteger countData = 0;
+            noteDataString = [NSString stringWithFormat:@"downloadLink=%@&countData=%ld",downloadLink,[emailQRCodeList count]];
+            for(EmailQRCode *item in emailQRCodeList)
+            {
+                noteDataString = [NSString stringWithFormat:@"%@&codeWithoutNo%02ld=%@&productName%02ld=%@&color%02ld=%@&size%02ld=%@&price%02ld=%@&qty%02ld=%@",noteDataString,countData,item.code,countData,item.productName,countData,item.color,countData,item.size,countData,item.price,countData,item.qty];
+                countData++;
+            }
+            url = [NSURL URLWithString:[Utility url:urlEmailQRCode]];
+        }
+            break;
         default:
             
             break;
@@ -1815,7 +1865,8 @@
     propCurrentDB = currentDB;
     NSURL * url;
     NSString *noteDataString;
-    switch (currentDB) {
+    switch (currentDB)
+    {
         case dbUserAccount:
         {
             UserAccount *userAccount = (UserAccount *)data;

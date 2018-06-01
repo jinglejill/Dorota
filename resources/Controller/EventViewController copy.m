@@ -68,8 +68,7 @@
         {
             _event.modifiedUser = [Utility modifiedUser];
             [_homeModel insertItems:dbEvent withData:_event];
-            [self loadingOverlayView];
-//            [self updateSharedDataAfterInsert];
+            [self updateSharedDataAfterInsert];
         }
         else if(currentAction == edit)
         {
@@ -157,7 +156,6 @@
     {
         [_eventInSection addObject:@[@"Past",_eventListPastDesc]];
     }
-    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -186,11 +184,9 @@
     }
 }
 
--(void)itemsInsertedWithReturnData:(NSMutableArray *)data
+-(void)itemsInserted
 {
-    [self removeOverlayViews];
-    [Utility addToSharedDataList:data];
-    [self loadViewProcess];
+    
 }
 
 -(void)itemsDeleted
@@ -295,8 +291,6 @@
                                                  currentAction = delete;
                                                  [_homeModel deleteItems:dbEvent withData:event];
                                                  
-                                                 
-                                                 
                                                  //delete from sharedevent
                                                  for(Event *item in _eventList)
                                                  {
@@ -306,11 +300,11 @@
                                                          break;
                                                      }
                                                  }
-                                                 [self loadViewProcess];
-//                                                 NSArray *arrOfEventList = [Event SplitEventNowAndFutureAndPast:_eventList];
-//                                                 _eventListNowAndFutureAsc = arrOfEventList[0];
-//                                                 _eventListPastDesc = arrOfEventList[1];
-//                                                 [self.tableView reloadData];
+                                                 
+                                                 NSArray *arrOfEventList = [Event SplitEventNowAndFutureAndPast:_eventList];
+                                                 _eventListNowAndFutureAsc = arrOfEventList[0];
+                                                 _eventListPastDesc = arrOfEventList[1];
+                                                 [self.tableView reloadData];
                                              }]];
                      [alert addAction:
                       [UIAlertAction actionWithTitle:@"Cancel"

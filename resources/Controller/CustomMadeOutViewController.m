@@ -469,6 +469,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:postDetail.receiptProductItemID];
     receiptProductItem.customMadeIn = @"0";
     receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    receiptProductItem.modifiedUser = [Utility modifiedUser];
     [receiptProductItemList addObject:receiptProductItem];
     [_homeModel updateItems:dbReceiptProductItemUpdateCMIn withData:receiptProductItemList];
     
@@ -748,6 +749,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
                 ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:item.receiptProductItemID];
                 receiptProductItem.customMadeIn = @"0";
                 receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                receiptProductItem.modifiedUser = [Utility modifiedUser];
                 [receiptProductItemList addObject: receiptProductItem];
             }
         }
@@ -782,6 +784,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
                 ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:item.receiptProductItemID];
                 receiptProductItem.customMadeIn = @"0";
                 receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                receiptProductItem.modifiedUser = [Utility modifiedUser];
                 [receiptProductItemList addObject: receiptProductItem];
             }
         }

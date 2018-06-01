@@ -164,7 +164,8 @@ enum enumDB
     dbReceiptByMember,
     dbRewardProgram,
     dbReceiptProductItemPreOrderEventID,
-    dbWriteLog
+    dbWriteLog,
+    dbEmailQRCode
 };
 enum enumUrl
 {
@@ -288,7 +289,8 @@ enum enumUrl
     urlRewardProgramUpdate,
     urlRewardProgramDelete,
     urlReceiptProductItemPreOrderEventID,
-    urlWriteLog
+    urlWriteLog,
+    urlEmailQRCode
 };
 enum enumTableName
 {
@@ -401,8 +403,8 @@ enum enumProductLabel
 + (NSDate *) stringToDate:(NSString *)strDate fromFormat:(NSString *)fromFormat;
 + (NSString *) dateToString:(NSDate *)date toFormat:(NSString *)toFormat;
 + (NSDate *) setDateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;
-+ (NSData *) encrypt:(NSString *)data;
-+ (NSString *) decrypt:(NSData *)encryptedData;
+//+ (NSData *) encrypt:(NSString *)data;
+//+ (NSString *) decrypt:(NSData *)encryptedData;
 + (Product *) getProductWithProductCode:(NSString *)productCode;
 + (NSInteger) numberOfDaysFromDate:(NSDate *)dateFrom dateTo:(NSDate *)dateTo;
 + (NSInteger) numberOfDaysInEvent:(NSInteger)eventID;
@@ -474,7 +476,7 @@ enum enumProductLabel
 + (NSString *)getStringNameID:(NSString *)className;
 + (NSString *)getMasterClassName:(NSInteger)i;
 + (NSString *)getMasterClassName:(NSInteger)i from:(NSArray *)arrClassName;
-+ (NSString *)getDecryptedHexString:(NSString *)hexString;
+//+ (NSString *)getDecryptedHexString:(NSString *)hexString;
 + (BOOL)isValidProduct:(Product*)product error:(NSString **)error;
 + (CustomerReceipt *)getCustomerReceiptFromPostCustomerID:(NSInteger)postCustomerID;
 + (NSString *)getSqlFailTitle;
@@ -501,6 +503,13 @@ enum enumProductLabel
 + (NSString *)setPhoneNoFormat:(NSString *)text;
 + (void)setUserDefaultPreOrderEventID:(NSString *) strSelectedEventID;
 + (NSString *)getUserDefaultPreOrderEventID;
-
++(NSDate *)getEndOfMonth:(NSDate *)date;
++(NSDate *)getFirstDateOfMonth:(NSDate *)date;
++ (NSDate *) currentDateTime;
++(NSArray *)jsonToArray:(NSArray *)arrDataJson arrClassName:(NSArray *)arrClassName;
++ (BOOL)isDateColumn:(NSString *)columnName;
++(void)addToSharedDataList:(NSArray *)items;
++ (NSString *)getPrimaryKeyFromClassName:(NSString *)className;
++ (BOOL)duplicate:(NSObject *)object;
 @end
 

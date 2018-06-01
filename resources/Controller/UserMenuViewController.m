@@ -7,6 +7,7 @@
 //
 
 #import "UserMenuViewController.h"
+#import "GenerateQRCodePageViewController.h"
 #import "Utility.h"
 #import "Product.h"
 #import "ReceiptViewController.h"
@@ -92,7 +93,8 @@ enum enumAdminMenu
                           @"Receipt summary"
                           ];
     _menuExtra = @[@"To post product",
-                   @"Posted product"];
+                   @"Posted product",
+                   @"Create QR Code File"];
 
     
     
@@ -210,6 +212,9 @@ enum enumAdminMenu
             case 1:
                 [self performSegueWithIdentifier:@"segProductPosted" sender:self];
                 break;
+            case 2:
+                [self performSegueWithIdentifier:@"segGenerateQRCodePage" sender:self];
+                break;
         }
     }
     else
@@ -279,6 +284,11 @@ enum enumAdminMenu
     else if([[segue identifier] isEqualToString:@"segProductPosted"])
     {
         ProductPostedViewController *vc = [segue destinationViewController];
+        vc.fromUserMenu = YES;
+    }
+    else if([[segue identifier] isEqualToString:@"segGenerateQRCodePage"])
+    {
+        GenerateQRCodePageViewController *vc = [segue destinationViewController];
         vc.fromUserMenu = YES;
     }
 }

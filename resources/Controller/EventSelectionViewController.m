@@ -165,6 +165,7 @@
         event.remark = item.remark;
         event.productSalesSetID = item.productSalesSetID;
         event.modifiedDate = item.modifiedDate;
+        event.modifiedUser = item.modifiedUser;
         event.periodFrom = item.periodFrom;
         event.periodTo = item.periodTo;
         [eventList addObject:event];

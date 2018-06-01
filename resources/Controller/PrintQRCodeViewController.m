@@ -24,6 +24,8 @@
 #import "PushSync.h"
 #import "QRCodeQuantity.h"
 #include "TargetConditionals.h"
+#import "QRCodeView.h"
+
 
 #define kBROTHERPJ673   @"Brother PJ-673"
 
@@ -65,7 +67,7 @@
 
 
 @implementation PrintQRCodeViewController
-
+static NSString * const reuseIdentifier = @"QRCodeView";
 @synthesize mutArrQRCodeQuantity,strManufacturingDate,tableViewData,lblPrintStatus;
 
 
@@ -505,59 +507,65 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CustomUITableViewCell4 *cell;
-    if (cell == nil) {
-        cell = [[CustomUITableViewCell4 alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"QRCodeCell"];
-    }
-    
+//    CustomUITableViewCell4 *cell;
+//    if (cell == nil) {
+//        cell = [[CustomUITableViewCell4 alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"QRCodeCell"];
+//    }
+    QRCodeView *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     NSInteger item = indexPath.item;
     if([_mutArrAllProductLabel count] == 0)
     {
-        return cell;
+        return (UITableViewCell *)cell;
     }
     QRCodeQuantity *qrCodeQuantity = _mutArrAllProductLabel[item];
-    
+    cell.lblProductName.text = qrCodeQuantity.productName;
+    cell.lblColor.text = qrCodeQuantity.color;
+    cell.lblPrice.text = [NSString stringWithFormat:@"%@ Baht",[Utility formatBaht:qrCodeQuantity.price]];
+    cell.lblSize.text = qrCodeQuantity.size;
+//    cell.lblSize.numberOfLines = 0;
+//    [cell.lblSize sizeToFit];
+    cell.imgVwQRCode.image = [self generateQRCodeWithString:qrCodeQuantity.qrCode scale:5.0f];
     
     //vwPrint (316,371)
-    float margin = 20;
-    //    float qrCodeWidth = 70;
-    float qrCodeWidth = 90;
-    float vwPrintWidth = cell.frame.size.width;//cell.vwPrint.frame.size.width;
-    float labelWidth = vwPrintWidth-qrCodeWidth-2*margin;
-    cell.vwPrint.frame = CGRectMake(0,0,vwPrintWidth,160);
-    cell.lblProductName.frame = CGRectMake(margin,15,labelWidth,50);
-    cell.lblProductName.text = qrCodeQuantity.productName;
-    
-    
-    cell.lblColor.frame = CGRectMake(margin,65,labelWidth,50);
-    cell.lblColor.text = qrCodeQuantity.color;
-    
-    
-    cell.lblPrice.frame = CGRectMake(margin,120,labelWidth,25);
-    cell.lblPrice.text = [NSString stringWithFormat:@"%@ Baht",[Utility formatBaht:qrCodeQuantity.price]];
-    
-
-    cell.lblSize.frame = CGRectMake(margin+labelWidth,105,qrCodeWidth,50);
-    cell.lblSize.text = qrCodeQuantity.size;
-    
-
-    cell.imgVwQRCode.frame = CGRectMake(margin+labelWidth,margin-10,qrCodeWidth,qrCodeWidth);
-    cell.imgVwQRCode.image = [self generateQRCodeWithString:qrCodeQuantity.qrCode scale:5.0f];
-    {
-        CGSize sizeLblProductName = [cell.lblProductName.text sizeWithAttributes:@{ NSFontAttributeName: cell.lblProductName.font}];
-        CGSize sizeLblColor = [cell.lblColor.text sizeWithAttributes:@{ NSFontAttributeName: cell.lblColor.font}];
-        NSLog(@"size lblproductname width: %f,%f",cell.lblProductName.bounds.size.width,sizeLblProductName.width);
-        NSLog(@"size sizeLblColor width: %f,%f",cell.lblColor.bounds.size.width,sizeLblColor.width);
-        if (sizeLblProductName.width > cell.lblProductName.bounds.size.width || sizeLblColor.width > cell.lblColor.bounds.size.width)
-            
-        {
-            cell.lblProductName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:28];
-            cell.lblColor.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:28];
-            cell.lblPrice.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
-            
-        }
-    }
+//    float margin = 20;
+//    //    float qrCodeWidth = 70;
+//    float qrCodeWidth = 90;
+//    float vwPrintWidth = cell.frame.size.width;//cell.vwPrint.frame.size.width;
+//    float labelWidth = vwPrintWidth-qrCodeWidth-2*margin;
+//    cell.vwPrint.frame = CGRectMake(0,0,vwPrintWidth,160);
+//    cell.lblProductName.frame = CGRectMake(margin,15,labelWidth,50);
+//    cell.lblProductName.text = qrCodeQuantity.productName;
+//
+//
+//    cell.lblColor.frame = CGRectMake(margin,65,labelWidth,50);
+//    cell.lblColor.text = qrCodeQuantity.color;
+//
+//
+//    cell.lblPrice.frame = CGRectMake(margin,120,labelWidth,25);
+//    cell.lblPrice.text = [NSString stringWithFormat:@"%@ Baht",[Utility formatBaht:qrCodeQuantity.price]];
+//
+//
+//    cell.lblSize.frame = CGRectMake(margin+labelWidth,105,qrCodeWidth,50);
+//    cell.lblSize.text = qrCodeQuantity.size;
+//
+//
+//    cell.imgVwQRCode.frame = CGRectMake(margin+labelWidth,margin-10,qrCodeWidth,qrCodeWidth);
+//    cell.imgVwQRCode.image = [self generateQRCodeWithString:qrCodeQuantity.qrCode scale:5.0f];
+//    {
+//        CGSize sizeLblProductName = [cell.lblProductName.text sizeWithAttributes:@{ NSFontAttributeName: cell.lblProductName.font}];
+//        CGSize sizeLblColor = [cell.lblColor.text sizeWithAttributes:@{ NSFontAttributeName: cell.lblColor.font}];
+//        NSLog(@"size lblproductname width: %f,%f",cell.lblProductName.bounds.size.width,sizeLblProductName.width);
+//        NSLog(@"size sizeLblColor width: %f,%f",cell.lblColor.bounds.size.width,sizeLblColor.width);
+//        if (sizeLblProductName.width > cell.lblProductName.bounds.size.width || sizeLblColor.width > cell.lblColor.bounds.size.width)
+//
+//        {
+//            cell.lblProductName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:28];
+//            cell.lblColor.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:28];
+//            cell.lblPrice.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+//
+//        }
+//    }
     
     return cell;
     
@@ -660,101 +668,64 @@
     
     return finalImage;
 }
+
 - (IBAction)printQRCode:(id)sender {
     
     BOOL printerReady = [self checkPrinterReady];
-    
-    
+
+
     UIApplication *app = [UIApplication sharedApplication];
     bgTask = [app beginBackgroundTaskWithExpirationHandler: ^{
         //A handler to be called shortly before the app’s remaining background time reaches 0.
         // You should use this handler to clean up and mark the end of the background task.
     }];
-    
+
     if (printerReady)
     {
         NSLog(@"Will start to print image file...");
         NSLog(@"Printer is ready !");
         
         
-        CGImageRef	imgRef;
+        
         
         
         //	Get ImageRef
 //        UIImage *combineImage;
         for(int i=0; i<[_mutArrAllProductLabel count]; i++)
         {
-            NSInteger margin = 10;
-//            if ([_printerName isEqualToString:@"Brother QL-720NW"])
-//            {
-//                margin = 10;
-//            }
-//            else if([_printerName isEqualToString:@"Brother RJ-3150"])
-//            {
-//                margin = 20;
-//            }
-//            else
-//            {
-//                margin = 20;
-//            }
-            QRCodeView *vwQRCode = [[QRCodeView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 188)];
-            {
-                
-                QRCodeQuantity *qrCodeQuantity = _mutArrAllProductLabel[i];
-                NSString *strProductName = qrCodeQuantity.productName;
-                NSString *strColor = qrCodeQuantity.color;
-                NSString *strSize = qrCodeQuantity.size;
-                NSString *strPrice = qrCodeQuantity.price;
-                NSString *strQRCode = qrCodeQuantity.qrCode;
-                
-                
-                float qrCodeWidth = 110;//90;
-                float vwPrintWidth = vwQRCode.vwPrint.frame.size.width;
-                float labelWidth = vwPrintWidth-qrCodeWidth-2*margin;//fixed label width
-                vwQRCode.lblProductName.frame = CGRectMake(margin,15,labelWidth,50);
-                vwQRCode.lblProductName.text = strProductName;
-                
-                vwQRCode.lblColor.frame = CGRectMake(margin,65,labelWidth,50);
-                vwQRCode.lblColor.text = strColor;
-                
-                vwQRCode.lblPrice.frame = CGRectMake(margin,120,labelWidth,25);
-                vwQRCode.lblPrice.text = [NSString stringWithFormat:@"%@ Baht",[Utility formatBaht:strPrice]];
-                
-
-                vwQRCode.lblSize.frame = CGRectMake(margin+labelWidth,130,qrCodeWidth,50);
-                vwQRCode.lblSize.text = strSize;
-                
-
-                vwQRCode.imgVwQRCode.frame = CGRectMake(margin+labelWidth,margin-10,qrCodeWidth,qrCodeWidth);
-                vwQRCode.imgVwQRCode.image = [self generateQRCodeWithString:strQRCode scale:5.0f];
-                
-                
-                {
-                    CGSize sizeLblProductName = [vwQRCode.lblProductName.text sizeWithAttributes:@{ NSFontAttributeName: vwQRCode.lblProductName.font}];
-                    CGSize sizeLblColor = [vwQRCode.lblColor.text sizeWithAttributes:@{ NSFontAttributeName: vwQRCode.lblColor.font}];
-                    NSLog(@"size lblproductname width: %f,%f",vwQRCode.lblProductName.bounds.size.width,sizeLblProductName.width);
-                    NSLog(@"size sizeLblColor width: %f,%f",vwQRCode.lblColor.bounds.size.width,sizeLblColor.width);
-                    if (sizeLblProductName.width > vwQRCode.lblProductName.bounds.size.width || sizeLblColor.width > vwQRCode.lblColor.bounds.size.width)
-                        
-                    {
-                        vwQRCode.lblProductName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:35];
-                        vwQRCode.lblColor.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:35];
-                        vwQRCode.lblPrice.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:25];
-                        
-                    }
-                }
-
-            }
-            UIImage *imagePrint = [self imageForView:vwQRCode.vwPrint];
+            CGRect frame = tableViewData.frame;
+            frame.size.height = 160;
+//            QRCodeView *cell = [[QRCodeView alloc]initWithFrame:frame];
+            QRCodeView *cell = [tableViewData dequeueReusableCellWithIdentifier:reuseIdentifier];
+            cell.frame = frame;
+            QRCodeQuantity *qrCodeQuantity = _mutArrAllProductLabel[i];
+            cell.lblProductName.text = qrCodeQuantity.productName;
+            cell.lblColor.text = qrCodeQuantity.color;
+            cell.lblPrice.text = [NSString stringWithFormat:@"%@ Baht",[Utility formatBaht:qrCodeQuantity.price]];
+            cell.lblSize.text = qrCodeQuantity.size;
+//            cell.lblSize.numberOfLines = 0;
+//            [cell.lblSize sizeToFit];
+            cell.imgVwQRCode.image = [self generateQRCodeWithString:qrCodeQuantity.qrCode scale:5.0f];
+            
+            UIImage *imagePrint = [self imageForView:cell];
+//            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//            NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"qrpdf417%d.png",i]];
+//
+//            // Save image.
+//            [UIImagePNGRepresentation(imagePrint) writeToFile:filePath atomically:YES];
             
             
-            
-            imgRef = [imagePrint CGImage];
+
+
+
+
+
+            CGImageRef imgRef = [imagePrint CGImage];
             if (!imgRef) {
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                                message:@"Bad image"
                                                                         preferredStyle:UIAlertControllerStyleAlert];
-                
+
                 UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {}];
                 [alert addAction:defaultAction];
@@ -769,7 +740,7 @@
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                        message:@"Please check your Network settings"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-        
+
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
         [alert addAction:defaultAction];
@@ -821,7 +792,7 @@
 -(UIImage *) generateQRCodeWithString:(NSString *)string scale:(CGFloat) scale{
     NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding ];
     
-    CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    CIFilter *filter = [CIFilter filterWithName:@"CIPDF417BarcodeGenerator"];
     [filter setValue:stringData forKey:@"inputMessage"];
     [filter setValue:@"M" forKey:@"inputCorrectionLevel"];
     
@@ -910,6 +881,12 @@
 {
     [super viewDidLoad];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
+    
+    
+    {
+        UINib *nib = [UINib nibWithNibName:reuseIdentifier bundle:nil];
+        [tableViewData registerNib:nib forCellReuseIdentifier:reuseIdentifier];
+    }
     
     if (printerList == nil) {
         printerList = [[NSArray alloc] initWithArray:[self getPrinterList]];

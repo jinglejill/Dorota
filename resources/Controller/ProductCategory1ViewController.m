@@ -163,6 +163,7 @@
             if(![productCategory1.name isEqualToString:productCategory1Initial.name])
             {
                 productCategory1.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                productCategory1.modifiedUser = [Utility modifiedUser];
             }
         }
     }
@@ -184,6 +185,7 @@
             productCategory1.name = cell.textNewLabel.text;
             productCategory1.productCategory2 = productCategory2;
             productCategory1.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            productCategory1.modifiedUser = [Utility modifiedUser];
         }        
         [productCategory1NewList addObject:productCategory1];
     }
@@ -500,6 +502,7 @@
             productName.productCategory1 = productCategory1.code;
             productName.detail = @"";
             productName.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            productName.modifiedUser = [Utility modifiedUser];
             
             [productNameNewList addObject:productName];
         }

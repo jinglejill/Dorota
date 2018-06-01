@@ -219,6 +219,7 @@
     _userAccount = [UserAccount getUserAccountByUsername:txtRegisteredEmail.text];
     _userAccount.password = fieldString;
     _userAccount.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    _userAccount.modifiedUser = [Utility modifiedUser];
     [_homeModel updateItems:dbUserAccount withData:_userAccount];
     
 

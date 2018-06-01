@@ -81,6 +81,8 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         Event *event = [Utility getEvent:[item.eventID integerValue]];
         item.eventName = event.location;
         item.modifiedDateText = [Utility formatDate:item.modifiedDate fromFormat:@"yyyy-MM-dd HH:mm:ss" toFormat:@"dd/MM/yyyy HH:mm"];
+        item.modifiedUser = [Utility modifiedUser];
+        
     }
     
     

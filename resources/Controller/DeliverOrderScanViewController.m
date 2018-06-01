@@ -88,6 +88,7 @@
     }
     
     self.navigationController.toolbarHidden = NO;
+    [self.navigationItem setRightBarButtonItem:nil];
     
     
     _productExecuteList = [[NSMutableArray alloc]init];
@@ -220,7 +221,7 @@
     dispatchQueue = dispatch_queue_create("myQueue", NULL);
     [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
     //    [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeQRCode]];
+    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypePDF417Code]];
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
@@ -326,6 +327,7 @@
             productQR.eventID = 0;
             productQR.productNameID = productName.productNameID;
             productQR.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            productQR.modifiedUser = [Utility modifiedUser];
             [[SharedProduct sharedProduct].productList addObject:productQR]; //add to shared product
             [_productScanList addObject:productQR];
             [_productExecuteTempList addObject:productQR];
@@ -430,7 +432,7 @@
     if (metadataObjects && [metadataObjects count] > 0)
     {
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode])
+        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypePDF417Code])
         {
             NSString *decryptedMessage = [metadataObj stringValue];
             [self scanQRcode:decryptedMessage];
@@ -683,16 +685,17 @@
 
 -(void) addProductInMainInventory
 {
-    NSInteger nextProductID = [[Utility getNextProductID] integerValue];
+//    NSInteger nextProductID = [[Utility getNextProductID] integerValue];
     for(int i=0; i<[txtQuantity.text integerValue]; i++)
     {
         Product *productQR = [_productScan copy];
         ProductName *productName = [ProductName getProductNameWithProduct:productQR];
-        productQR.productID = [NSString stringWithFormat:@"%06ld", nextProductID+i];
+        productQR.productID = [Utility getNextProductID];//[NSString stringWithFormat:@"%06ld", nextProductID+i];
         productQR.status = @"I";
         productQR.eventID = 0;
         productQR.productNameID = productName.productNameID;
         productQR.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        productQR.modifiedUser = [Utility modifiedUser];
         
         
         [[SharedProduct sharedProduct].productList addObject:productQR];//add to shared product

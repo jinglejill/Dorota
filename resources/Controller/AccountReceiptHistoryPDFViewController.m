@@ -137,7 +137,8 @@
         for(AccountReceiptProductItem *accountReceiptProductItem in accountReceiptProductItemList)
         {
             NSMutableDictionary *item = [[NSMutableDictionary alloc]init];
-            ProductName *productName = [ProductName getProductName:accountReceiptProductItem.productNameID];
+            ProductName *productName = accountReceiptProductItem.productNameID==56?[ProductName getProductName:15]:[ProductName getProductName:accountReceiptProductItem.productNameID];
+//            ProductName *productName = accountReceiptProductItem.productNameID;
             NSString *strItemNo = [ProductName getProductCode:accountReceiptProductItem.productNameID];
             NSString *strQuantity = [NSString stringWithFormat:@"%f",accountReceiptProductItem.quantity];
             NSString *strAmountPerUnit = [NSString stringWithFormat:@"%f",accountReceiptProductItem.amountPerUnit];

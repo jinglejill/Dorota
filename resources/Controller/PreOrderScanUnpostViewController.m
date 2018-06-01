@@ -190,7 +190,7 @@
     dispatch_queue_t dispatchQueue;
     dispatchQueue = dispatch_queue_create("myQueue", NULL);
     [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
-    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeQRCode]];
+    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypePDF417Code]];
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
@@ -208,7 +208,7 @@
     if (metadataObjects != nil && [metadataObjects count] > 0)
     {
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode])
+        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypePDF417Code])
         {
             NSString *error;
             NSString *decryptedMessage = [metadataObj stringValue];
@@ -327,19 +327,23 @@
                 
                         postedProduct.status = @"I";
                         postedProduct.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        postedProduct.modifiedUser = [Utility modifiedUser];
                         
                         CustomMade *customMade = [Utility getCustomMadeFromProductIDPost:postedProduct.productID];
                         customMade.productIDPost = @"";
                         customMade.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        customMade.modifiedUser = [Utility modifiedUser];
                         
                         ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:postDetail.receiptProductItemID];
                         receiptProductItem.productID = [NSString stringWithFormat:@"%ld",customMade.customMadeID];
                         receiptProductItem.productType = @"C";
                         receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        receiptProductItem.modifiedUser = [Utility modifiedUser];
                         
                         CustomerReceipt *customerReceipt = [CustomerReceipt getCustomerReceiptWithReceiptID:postDetail.receiptID];
                         customerReceipt.trackingNo = @"";
                         customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        customerReceipt.modifiedUser = [Utility modifiedUser];
                         [_CMScanList addObject:postedProduct];
                         
                         
@@ -511,14 +515,17 @@
                         
                         postedProduct.status = @"P";
                         postedProduct.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        postedProduct.modifiedUser = [Utility modifiedUser];
                         
                         ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:postDetail.receiptProductItemID];
                         receiptProductItem.productType = @"P";
                         receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        receiptProductItem.modifiedUser = [Utility modifiedUser];
                         
                         CustomerReceipt *customerReceipt = [CustomerReceipt getCustomerReceiptWithReceiptID:postDetail.receiptID];
                         customerReceipt.trackingNo = @"";
                         customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        customerReceipt.modifiedUser = [Utility modifiedUser];
                         [_productScanList addObject:postedProduct];
                         
                         

@@ -20,6 +20,7 @@
 #import "Color.h"
 #import "PrintQRCodeViewController.h"
 #import "Utility.h"
+#import "EmailQRCode.h"
 
 
 @interface GenerateQRCodePageViewController ()
@@ -36,6 +37,11 @@
 
 @implementation GenerateQRCodePageViewController
 @synthesize pageController;
+@synthesize btnGenerateQR;
+@synthesize btnDownload;
+@synthesize fromUserMenu;
+
+
 - (IBAction)unwindToGenerateQRCodePage:(UIStoryboardSegue *)segue
 {
     NSString *strCurrentIndex = [NSString stringWithFormat:@"%ld",_currentPage];
@@ -131,6 +137,13 @@
         indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         indicator.frame = CGRectMake(self.view.bounds.size.width/2-indicator.frame.size.width/2,self.view.bounds.size.height/2-indicator.frame.size.height/2,indicator.frame.size.width,indicator.frame.size.height);        
     }
+    
+    
+    if(fromUserMenu)
+    {
+        [self.navigationItem setRightBarButtonItem:nil];
+        [self.navigationItem setRightBarButtonItems:@[btnDownload]];
+    }
         
     
     _mutArrQRCodeQuantity = [[NSMutableArray alloc]init];
@@ -210,10 +223,11 @@
     [currentVC.colViewSummaryTable reloadData];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+        
     
     NSMutableArray *productSalesList = [SharedProductSales sharedProductSales].productSalesList;
     for(ProductSales *item in productSalesList)
@@ -343,5 +357,108 @@
     [[SharedGenerateQRCodePage sharedGenerateQRCodePage].dicGenerateQRCodePage removeAllObjects];
 //    [SharedGenerateQRCodePage sharedGenerateQRCodePage].dicGenerateQRCodePage = nil;
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)emailQRCode:(id)sender
+{
+    GenerateQRCodeViewController *currentVC = [self.pageController viewControllers][0];
+    id responder = [currentVC findFirstResponder:currentVC.view];
+    if(responder)
+    {
+        [responder resignFirstResponder];
+    }
+    
+    
+    NSMutableDictionary *dicGenerateQRCodePage = [SharedGenerateQRCodePage sharedGenerateQRCodePage].dicGenerateQRCodePage;
+    if([dicGenerateQRCodePage count] == 0)
+    {
+        return;
+    }
+    
+    
+    
+    NSMutableArray *emailQRCodeList = [[NSMutableArray alloc]init];
+    
+    for(NSString *key in dicGenerateQRCodePage)
+    {
+        NSArray *arrQrCodeValue = [dicGenerateQRCodePage valueForKey:key];
+        //        if(arrQrCodeValue)
+        {
+            NSMutableDictionary *dicSectionAndItemToTag = arrQrCodeValue[0];
+            NSMutableDictionary *dicGenerateQRCode = arrQrCodeValue[1];
+            NSMutableArray *productNameTableList = arrQrCodeValue[2];
+            
+            for(id key in dicGenerateQRCode)
+            {
+                NSString *quantity = [dicGenerateQRCode valueForKey:key];
+                NSArray *arrSectionAndItem = [dicSectionAndItemToTag allKeysForObject:key];
+                
+                NSString *sectionAndItem = arrSectionAndItem[0];
+                NSArray *arrPartSectionAndItem = [sectionAndItem componentsSeparatedByString:@";"];
+                
+                NSInteger section = [[arrPartSectionAndItem objectAtIndex: 0] integerValue];
+                NSInteger item = [[arrPartSectionAndItem objectAtIndex: 1] integerValue];
+                
+                
+                NSArray *productNameTable = productNameTableList[section];
+                ProductName *productName = productNameTable[0];
+                NSArray *colorList = productNameTable[1];
+                NSArray *sizeList = productNameTable[2];
+                NSInteger sizeNum = [sizeList count];
+                
+                Color *color = colorList[(item/(sizeNum+1))-1];
+                ProductSize *productSize = sizeList[(item%(sizeNum+1))-1];
+                ProductSales *productSales = [ProductSales getProductSalesFromProductNameID:productName.productNameID color:color.code size:productSize.code productSalesSetID:@"0"];
+                GenerateQRCodeViewController *currentVC = [self.pageController viewControllers][0];
+                NSString *mfd = [Utility formatDate:currentVC.txtManufacturingDate.text fromFormat:@"dd/MM/yyyy" toFormat:@"yyyyMMdd"];
+                NSString *codeWithoutNo = [NSString stringWithFormat:@"%@%@%@%@%@%@",productName.productCategory2,productName.productCategory1,productName.code,color.code,productSize.code,mfd];
+                EmailQRCode *emailQRCode = [[EmailQRCode alloc]init];
+                emailQRCode.code = codeWithoutNo;
+                emailQRCode.productName = productName.name;
+                emailQRCode.color = color.name;
+                emailQRCode.size = productSize.sizeLabel;
+                emailQRCode.price = productSales.price;
+                emailQRCode.qty = quantity;
+                [emailQRCodeList addObject:emailQRCode];
+            }
+        }
+    }
+    
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_productName" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"_color" ascending:YES];
+    NSSortDescriptor *sortDescriptor3 = [[NSSortDescriptor alloc] initWithKey:@"_size" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor1,sortDescriptor2,sortDescriptor3, nil];
+    
+    NSArray *sortArray = [emailQRCodeList sortedArrayUsingDescriptors:sortDescriptors];
+//    NSString *fileName = [NSString stringWithFormat:@"%@QRCode%@.xls",[Utility setting:vBrand],[Utility currentDateTimeStringForDB]];
+    
+    NSString *strCurrentDate = [Utility dateToString:[Utility GMTDate:[NSDate date]] toFormat:@"yyyyMMdd_HHmmss"];
+    NSString *fileName = [NSString stringWithFormat:@"%@QRCode%@.xls",[Utility setting:vBrand],strCurrentDate];
+    NSString *downloadLink = [NSString stringWithFormat:@"%@/%@",[Utility domainName],fileName];
+    [_homeModel updateItems:dbEmailQRCode withData:@[fileName,sortArray]];
+    
+    
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Download link"
+                                                                   message:downloadLink
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Copy link" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action)
+                                    {
+                                        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                                        pasteboard.string = downloadLink;
+//                                        NSLog(@"download link: %@",downloadLink);
+//                                        NSLog(@"paste board string: %@",pasteboard.string);
+                                        
+                                    }];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)itemsUpdated
+{
+    
 }
 @end

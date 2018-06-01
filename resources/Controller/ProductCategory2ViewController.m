@@ -17,6 +17,7 @@
 #import "SharedProductCategory1.h"
 #import "SharedCustomMade.h"
 #import "SharedPushSync.h"
+#import "SharedColor.h"
 #import "PushSync.h"
 
 
@@ -152,6 +153,7 @@
             if(![productCategory2.name isEqualToString:productCategory2Initial.name])
             {
                 productCategory2.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                productCategory2.modifiedUser = [Utility modifiedUser];
             }
         }
     }
@@ -160,7 +162,8 @@
     //remove all newLabelList
     //add temp data to newlabellist
     [self convertCodeToProductCategory2ID];//table นี้ใช้ code เป็น primary key เลยต้อง copy code ใส่ใน default id อันนี้ทำได้เพราะ code ที่ใช้เป็นตัวเลขเท่านั้น
-    NSInteger nextID = [Utility getNextID:tblProductCategory2];
+//    NSInteger nextID = [Utility getNextID:tblProductCategory2];
+    NSInteger intNextCode = [[self getNextCode] integerValue];
     NSMutableArray *productCategory2NewList = [[NSMutableArray alloc]init];
     for(int i=0; i<[_newList count]; i++)
     {
@@ -169,7 +172,7 @@
         ProductCategory2 *productCategory2 = [[ProductCategory2 alloc]init];
         if(cell != nil)
         {
-            productCategory2.code = [NSString stringWithFormat:@"%02ld",nextID + i];
+            productCategory2.code = [NSString stringWithFormat:@"%02ld",intNextCode + i];
             productCategory2.name = cell.textNewLabel.text;
         }        
         [productCategory2NewList addObject:productCategory2];
@@ -180,6 +183,7 @@
     [_newList removeAllObjects];
     [_newList addObjectsFromArray:productCategory2NewList];
 }
+
 -(void)convertCodeToProductCategory2ID
 {
     for(ProductCategory2 *item in [SharedProductCategory2 sharedProductCategory2].productCategory2List)
@@ -383,6 +387,30 @@
         [_homeModel insertItems:dbProductCategory2 withData:_newList];
     }
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (NSString *)getNextCode
+{
+    //gen next running code
+    NSMutableArray *productCategory2List = [SharedProductCategory2 sharedProductCategory2].productCategory2List;
+//    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"_productCategory2 = %@",productCategory2];
+//    NSArray *filterArray = [productCategory1List filteredArrayUsingPredicate:predicate1];
+    
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_code" ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor1, nil];
+    NSArray *sortArray = [productCategory2List sortedArrayUsingDescriptors:sortDescriptors];
+    productCategory2List = [sortArray mutableCopy];
+    
+    if([productCategory2List count] == 0)
+    {
+        return @"1";
+    }
+    else
+    {
+        ProductCategory2 *productCategory2 = productCategory2List[0];
+        NSInteger number = [productCategory2.code intValue];
+        return [NSString stringWithFormat:@"%02ld",number+1];
+    }
 }
 
 - (void)itemsDeleted

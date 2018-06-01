@@ -257,6 +257,7 @@
                                     {
                                         item.eventID = 0;
                                         item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                        item.modifiedUser = [Utility modifiedUser];
                                     }
                                 }
                                 

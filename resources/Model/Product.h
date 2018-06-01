@@ -35,5 +35,5 @@
 - (id)init;
 + (NSMutableArray *)getProductListInMainInventory:(Product *)product;
 + (Product *)getProduct:(NSString *)productID;
-+ (Product *) getProductWithProductCode:(NSString *)productCode;
+//+ (Product *) getProductWithProductCode:(NSString *)productCode;
 @end

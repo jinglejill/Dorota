@@ -384,6 +384,7 @@ enum enumFixedCost
         {
             eventCost.eventCostID = nextID++;
             eventCost.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            eventCost.modifiedUser = [Utility modifiedUser];
             [_eventCostList addObject:eventCost];
         }
     }
@@ -394,6 +395,7 @@ enum enumFixedCost
         {
             eventCost.eventCostID = nextID++;
             eventCost.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            eventCost.modifiedUser = [Utility modifiedUser];
             [_eventCostList addObject:eventCost];
         }
     }

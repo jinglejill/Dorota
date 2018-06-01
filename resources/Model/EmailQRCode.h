@@ -9,5 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface EmailQRCode : NSObject
+@property (retain, nonatomic) NSString * code;
+@property (retain, nonatomic) NSString * productName;
+@property (retain, nonatomic) NSString * color;
+@property (retain, nonatomic) NSString * size;
+@property (retain, nonatomic) NSString * price;
+@property (retain, nonatomic) NSString * qty;
 
 @end

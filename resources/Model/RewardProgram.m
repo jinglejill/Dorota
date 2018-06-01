@@ -28,6 +28,7 @@
         self.discountType = discountType;
         self.discountAmount = discountAmount;
         self.modifiedDate = modifiedDate;
+        self.modifiedUser = [Utility modifiedUser];
     }
     return self;
 }

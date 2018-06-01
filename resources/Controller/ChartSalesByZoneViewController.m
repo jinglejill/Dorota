@@ -56,7 +56,8 @@ extern BOOL globalRotateFromSeg;
 @synthesize periodCondition;
 @synthesize segConType;
 
-- (void)loadView {
+- (void)loadView
+{
     [super loadView];
     // Do any additional setup after loading the view.
     

@@ -44,6 +44,7 @@
     NSUInteger fieldHash = [password hash];
     NSString *fieldString = [KeychainWrapper securedSHA256DigestHashForPIN:fieldHash];
     userAccount.password = fieldString;
+    userAccount.modifiedUser = [Utility modifiedUser];
     if (_userAccount) {
         [_homeModel insertItems:dbUserAccount withData:userAccount];
         
@@ -287,7 +288,9 @@
                 
                 userAccount.password = fieldString;
                 userAccount.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                userAccount.modifiedUser = [Utility modifiedUser];
 //                _userAccount = userAccount;
+                
                 [_homeModel updateItems:dbUserAccount withData:userAccount];
                 
                 

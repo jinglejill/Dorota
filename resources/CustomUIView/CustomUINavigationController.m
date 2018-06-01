@@ -34,6 +34,7 @@
 
 
 #define tYellow          [UIColor colorWithRed:251/255.0 green:188/255.0 blue:5/255.0 alpha:1]
+#define tTheme          [UIColor colorWithRed:91/255.0 green:1/255.0 blue:1/255.0 alpha:1]
 
 @interface CustomUINavigationController ()
 
@@ -43,7 +44,7 @@ extern BOOL globalRotateFromSeg;
 - (void)loadView
 {
     [super loadView];
-    UIColor *color = tYellow;
+    UIColor *color = tTheme;
     self.navigationBar.barTintColor = color;
 }
 

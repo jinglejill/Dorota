@@ -83,13 +83,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)];
+//    [self.view addGestureRecognizer:tapGesture];
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self textFieldShouldReturn:textField];
+}
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     //update db
-    NSLog(@"textfield should return");
     if([[_textEdit.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""])
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Invalid data"
@@ -495,6 +501,7 @@
     }
     _productSalesSet.productSalesSetID = productSalesSetIDCopy;
     _productSalesSet.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    _productSalesSet.modifiedUser = [Utility modifiedUser];
     [[SharedProductSalesSet sharedProductSalesSet].productSalesSetList addObject:_productSalesSet];
     _productSalesSetList = [SharedProductSalesSet sharedProductSalesSet].productSalesSetList;
     
@@ -522,7 +529,7 @@
         productSales.imageID = item.imageID;
         productSales.cost = item.cost;
         productSales.modifiedDate = item.modifiedDate;
-        
+        productSales.modifiedUser = [Utility modifiedUser];
         [productSalesListCopy addObject:productSales];
     }
 

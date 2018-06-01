@@ -50,6 +50,7 @@
 
 /* Macro for background colors */
 #define tYellow          [UIColor colorWithRed:251/255.0 green:188/255.0 blue:5/255.0 alpha:1]
+#define tTheme          [UIColor colorWithRed:196/255.0 green:164/255.0 blue:168/255.0 alpha:1]
 #define orangeColor         [UIColor colorWithRed:253/255.0 green:182/255.0 blue:103/255.0 alpha:1]
 #define tBlueColor          [UIColor colorWithRed:0/255.0 green:123/255.0 blue:255/255.0 alpha:1]
 
@@ -483,6 +484,8 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         cashAllocation.cashChanges = @"0";
         cashAllocation.cashTransfer = @"0";
         cashAllocation.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        cashAllocation.modifiedUser = [Utility modifiedUser];
+        
         [_homeModel insertItems:dbCashAllocationByEventIDAndInputDate withData:cashAllocation];
         
         //update shared
@@ -2055,7 +2058,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         else if([_arrCellType[item] intValue] == 14)
         {
             [cell addSubview:cell.cellBackground];
-            cell.cellBackground.backgroundColor = tYellow;
+            cell.cellBackground.backgroundColor = tTheme;
             [cell addSubview:cell.label];
             cell.label.frame = cell.bounds;
             cell.label.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:13];
@@ -2268,6 +2271,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                                     Product *product = [Product getProduct:receiptProductItem.productID];
                                     product.status = @"I";
                                     product.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                    product.modifiedUser = [Utility modifiedUser];
                                     [arrProduct addObject:product];
                                 }
                                 
@@ -2289,6 +2293,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                                     NSString *strCustomMadeID = [NSString stringWithFormat:@"%ld",customMade.customMadeID];
                                     customMade.productIDPost = @"";
                                     customMade.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                    customMade.modifiedUser = [Utility modifiedUser];
                                     [arrCustomMade addObject:customMade];
                                     
                                     receiptProductItem.productID = strCustomMadeID;
@@ -2299,6 +2304,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                                     receiptProductItem.productType = @"F";
                                 }
                                 receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                receiptProductItem.modifiedUser = [Utility modifiedUser];
                                 [arrReceiptProductItem addObject:receiptProductItem];
                                 
                                 
@@ -2411,6 +2417,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                                         item.status = @"I";
                                         item.remark = @"";
                                         item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                        item.modifiedUser = [Utility modifiedUser];
                                     }
                                     {
                                         NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_receiptProductItemID" ascending:YES];
@@ -2571,6 +2578,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         customMade.accessory = _txtCMAccessory.text;
         customMade.remark = _txtCMRemark.text;
         customMade.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        customMade.modifiedUser = [Utility modifiedUser];
         [_homeModel updateItems:dbCustomMade withData:customMade];
         
         [self setData];
@@ -2639,6 +2647,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
                 item.cashChanges = cashAllocation.cashChanges;
                 item.cashTransfer = cashAllocation.cashTransfer;
                 item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                item.modifiedUser = [Utility modifiedUser];
                 break;
             }
         }
@@ -3021,6 +3030,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
             {
                 item.status = status;
                 item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                item.modifiedUser = [Utility modifiedUser];
                 break;
             }
         }

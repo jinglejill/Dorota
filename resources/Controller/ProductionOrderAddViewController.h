@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtDate;
 @property (strong, nonatomic) IBOutlet UIDatePicker *dtPicker;
 @property (strong, nonatomic) IBOutlet UITextField *txtMainCategory;
+@property (strong, nonatomic) IBOutlet UITextField *txtEvent;
 @property (strong, nonatomic) IBOutlet UIPickerView *txtPicker;
 
 - (IBAction)datePickerChanged:(id)sender;

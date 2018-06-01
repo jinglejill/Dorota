@@ -15,6 +15,7 @@
 #import <DropboxSDK/DropboxSDK.h>
 #import "PasscodeViewController.h"
 #import "ReceiptSummaryViewController.h"
+#import "EventViewController.h"
 #import "PushSync.h"
 #import "SharedPushSync.h"
 #import "Login.h"
@@ -444,6 +445,36 @@ void myExceptionHandler(NSException *exception)
                 {
                     NSLog(@"staying at ReceiptSummaryViewController");
                     NSArray *arrReferenceTable = @[@"tProduct",@"tCashAllocation",@"tCustomMade",@"tReceipt",@"tReceiptProductItem",@"tCustomerReceipt",@"tPostCustomer",@"tPreOrderEventIDHistory"];
+                    if([arrReferenceTable containsObject:type])
+                    {
+                        {
+                            SEL s = NSSelectorFromString(@"loadingOverlayView");
+                            if([viewController respondsToSelector:s])
+                            {
+                                [viewController performSelector:s];
+                            }
+                        }
+                        
+                        {
+                            SEL s = NSSelectorFromString(@"loadViewProcess");
+                            if([viewController respondsToSelector:s])
+                            {
+                                [viewController performSelector:s];
+                            }
+                        }
+                        {
+                            SEL s = NSSelectorFromString(@"removeOverlayViews");
+                            if([viewController respondsToSelector:s])
+                            {
+                                [viewController performSelector:s];
+                            }
+                        }
+                        break;
+                    }
+                }
+                else if([viewController isMemberOfClass:[EventViewController class]])
+                {
+                    NSArray *arrReferenceTable = @[@"tEvent"];
                     if([arrReferenceTable containsObject:type])
                     {
                         {

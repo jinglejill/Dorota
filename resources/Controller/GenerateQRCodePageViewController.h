@@ -14,6 +14,10 @@
 <UIPageViewControllerDataSource,HomeModelProtocol,UIScrollViewDelegate,UIPageViewControllerDelegate>
 - (IBAction)backButtonClicked:(id)sender;
 @property (strong, nonatomic) UIPageViewController *pageController;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *btnGenerateQR;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *btnDownload;
+@property (nonatomic) NSInteger fromUserMenu;
 - (IBAction)generateQRCode:(id)sender;
 - (IBAction)unwindToGenerateQRCodePage:(UIStoryboardSegue *)segue;
+- (IBAction)emailQRCode:(id)sender;
 @end

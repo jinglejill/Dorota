@@ -119,6 +119,7 @@
         Setting *setting = [Utility getSetting:vAdminEmail];
         setting.value = textField.text;
         setting.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        setting.modifiedUser = [Utility modifiedUser];
         [_homeModel updateItems:dbSetting withData:setting];
         
     }
@@ -219,6 +220,7 @@
         Setting *setting = [Utility getSetting:vPasscode];
         setting.value = fieldString;
         setting.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        setting.modifiedUser = [Utility modifiedUser];
         [_homeModel updateItems:dbSetting withData:setting];
     }
     
@@ -227,6 +229,7 @@
         Setting *setting = [Utility getSetting:vAdminEmail];
         setting.value = [Utility trimString:txtRegisteredEmail.text];
         setting.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        setting.modifiedUser = [Utility modifiedUser];
         [_homeModel updateItems:dbSetting withData:setting];       
     }
     
@@ -367,6 +370,7 @@
         Setting *setting = [Utility getSetting:vPasscode];
         setting.value = fieldString;//--->sha hash
         setting.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        setting.modifiedUser = [Utility modifiedUser];
         [_homeModel updateItems:dbSetting withData:setting];
     }
     

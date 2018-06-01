@@ -112,6 +112,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
             productItem.size = [Utility getSizeLabel:item.size];
             productItem.sizeOrder = [Utility getSizeOrder:item.size];
             productItem.modifiedDate = item.modifiedDate;
+            
             productItem.modifiedDateNoTime = [Utility formatDate:item.modifiedDate fromFormat:@"yyyy-MM-dd HH:mm:ss" toFormat:@"yyyy-MM-dd"];
             productItem.modifiedDateText = [Utility formatDate:productItem.modifiedDate fromFormat:[Utility setting:vFormatDateTimeDB] toFormat:@"dd/MM/yyyy HH:mm:ss"];
             [_mutArrProductItem addObject:productItem];

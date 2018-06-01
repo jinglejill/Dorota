@@ -160,6 +160,7 @@
     NSInteger maxRunningReceiptNo = accountReceipt.maxRunningReceiptNo;
     
     
+    PostCustomer *postCustomer;
     NSMutableDictionary *receiptInfo;
     receiptInfoList = [[NSMutableArray alloc]init];
     NSMutableArray *items = [[NSMutableArray alloc]init];
@@ -186,8 +187,14 @@
                 [receiptInfo setValue:items forKey:@"items"];
                 
                 
+                postCustomer = [PostCustomer getPostCustomerWithReceiptID:salesProductAndPrice.receiptID postCustomerList:_postCustomerList];
                 SalesProductAndPrice *previousSalesProductAndPrice = [SalesProductAndPrice getSalesProductAndPriceWithReceiptID:previousReceiptID salesProductAndPriceList:salesProductAndPriceBillingsOnlySumQuantityList];
-                float discount = roundf(previousSalesProductAndPrice.receiptDiscount*100)/100;
+                
+                float discount = 0;
+                if(![postCustomer.taxCustomerName isEqualToString:@""])
+                {
+                    discount = roundf(previousSalesProductAndPrice.receiptDiscount*100)/100;
+                }
                 float totalAmountIncludeVat = grandTotalAmount - discount;
                 float vat = roundf(totalAmountIncludeVat*7/107*100)/100;
                 NSString *strGrandTotalAmount = [NSString stringWithFormat:@"%f",grandTotalAmount];
@@ -229,8 +236,8 @@
             
             
             
-            PostCustomer *postCustomer = [PostCustomer getPostCustomerWithReceiptID:salesProductAndPrice.receiptID postCustomerList:_postCustomerList];
-            if(![postCustomer.taxCustomerName isEqualToString:@""])
+//            PostCustomer *postCustomer = [PostCustomer getPostCustomerWithReceiptID:salesProductAndPrice.receiptID postCustomerList:_postCustomerList];
+            if(postCustomer && ![postCustomer.taxCustomerName isEqualToString:@""])
             {
                 [receiptInfo setValue:postCustomer.taxCustomerName forKey:@"customerName"];
                 [receiptInfo setValue:postCustomer.taxCustomerAddress forKey:@"customerAddress"];

@@ -80,6 +80,7 @@
     
     
     self.navigationController.toolbarHidden = NO;
+    [self.navigationItem setRightBarButtonItem:nil];
     self.navigationItem.title = [NSString stringWithFormat:@"Event - Inventory Scan"];
     lblLocation.text = [NSString stringWithFormat:@"Location: %@",[SharedSelectedEvent sharedSelectedEvent].event.location];
     lblLocation.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:13];
@@ -175,7 +176,7 @@
     dispatch_queue_t dispatchQueue;
     dispatchQueue = dispatch_queue_create("myQueue", NULL);
     [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
-    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeQRCode]];
+    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypePDF417Code]];
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
@@ -193,7 +194,7 @@
     if (metadataObjects && [metadataObjects count] > 0)
     {
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode])
+        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypePDF417Code])
         {
             NSString *decryptedMessage = [metadataObj stringValue];
             [self scanQRcode:decryptedMessage];
@@ -310,6 +311,7 @@
             
             productInMain.eventID = [SharedSelectedEvent sharedSelectedEvent].event.eventID;
             productInMain.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            productInMain.modifiedUser = [Utility modifiedUser];
             [_productScanList addObject:productInMain];
             [_productExecuteTempList addObject:productInMain];
             
@@ -660,6 +662,7 @@
         
         productInMain.eventID = [SharedSelectedEvent sharedSelectedEvent].event.eventID;
         productInMain.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        productInMain.modifiedUser = [Utility modifiedUser];
         [_productScanList addObject:productInMain];
         [_productExecuteTempList addObject:productInMain];
         

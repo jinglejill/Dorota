@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "HomeModel.h"
 
-@interface EventSalesSummaryViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,HomeModelProtocol>
+@interface EventSalesSummaryViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,HomeModelProtocol,UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *colViewSummaryTable;
 @property (strong, nonatomic) IBOutlet UILabel *lblLocation;
-
+@property (strong, nonatomic) IBOutlet UITextField *txtStartDate;
+@property (strong, nonatomic) IBOutlet UITextField *txtEndDate;
+@property (strong, nonatomic) IBOutlet UIDatePicker *dtPicker;
+- (IBAction)datePickerChanged:(id)sender;
 
 @end

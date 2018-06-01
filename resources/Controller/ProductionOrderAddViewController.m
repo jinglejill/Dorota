@@ -27,11 +27,13 @@
     HomeModel *_homeModel;
     NSMutableArray *_productCategory2List;
     NSInteger _selectedProductCategory2;
+    NSInteger _selectedEvent;
     NSMutableArray *_productSalesList;
     NSMutableArray *_productNameTableList;
     NSMutableDictionary *_dicSectionAndItemToTag;
     NSInteger _tagTextFieldQuantity;
     NSMutableDictionary *_dicGenerateQRCode;
+    NSMutableArray *_eventListNowAndFutureAsc;
 }
 @end
 
@@ -46,6 +48,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
 @synthesize txtDate;
 @synthesize dtPicker;
 @synthesize txtMainCategory;
+@synthesize txtEvent;
 @synthesize txtPicker;
 
 
@@ -135,7 +138,10 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         [productionOrderList addObject:productionOrder];
     }
     
-    [_homeModel insertItems:dbProductionOrder withData:productionOrderList];
+    
+    
+    Event *event = _eventListNowAndFutureAsc[_selectedEvent];
+    [_homeModel insertItems:dbProductionOrder withData:@[productionOrderList,event]];
     
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                    message:@"Add order success"
@@ -167,11 +173,13 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     _dicSectionAndItemToTag = [[NSMutableDictionary alloc]init];
     _productNameTableList = [[NSMutableArray alloc]init];
     _selectedProductCategory2 = 0;
-    
+    _selectedEvent = 0;
     
     [txtPicker removeFromSuperview];
     txtMainCategory.delegate = self;
     txtMainCategory.inputView = txtPicker;
+    txtEvent.delegate = self;
+    txtEvent.inputView = txtPicker;
     txtPicker.delegate = self;
     txtPicker.dataSource = self;
     txtPicker.showsSelectionIndicator = YES;
@@ -191,6 +199,12 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     
     ProductCategory2 *productCategory2 = _productCategory2List[_selectedProductCategory2];
     txtMainCategory.text = productCategory2.name;
+    
+    
+    _eventListNowAndFutureAsc = [Event getEventListNowAndFutureAsc];
+    Event *mainStock = [Event getMainEvent];
+    [_eventListNowAndFutureAsc insertObject:mainStock atIndex:0];
+    txtEvent.text = mainStock.location;
     
     
     [self queryProduct:productCategory2.code];
@@ -590,15 +604,33 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
     // Handle the selection
     
-    ProductCategory2 *productCategory2 = _productCategory2List[row];
-    txtMainCategory.text = productCategory2.name;
-    [self queryProduct:productCategory2.code];
-    [colViewData reloadData];
+    if([txtMainCategory isFirstResponder])
+    {
+        ProductCategory2 *productCategory2 = _productCategory2List[row];
+        txtMainCategory.text = productCategory2.name;
+        [self queryProduct:productCategory2.code];
+        [colViewData reloadData];
+    }
+    else if([txtEvent isFirstResponder])
+    {
+        _selectedEvent = row;
+        Event *event = _eventListNowAndFutureAsc[row];
+        txtEvent.text = event.location;
+    }
 }
 
 // tell the picker how many rows are available for a given component
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return [_productCategory2List count];
+    if([txtMainCategory isFirstResponder])
+    {
+        return [_productCategory2List count];
+    }
+    else if([txtEvent isFirstResponder])
+    {
+        return [_eventListNowAndFutureAsc count];
+    }
+    
+    return 0;
 }
 
 // tell the picker how many components it will have
@@ -609,8 +641,19 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 // tell the picker the title for a given component
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     
-    ProductCategory2 *productCategory2 = _productCategory2List[row];
-    return productCategory2.name;
+    if([txtMainCategory isFirstResponder])
+    {
+        ProductCategory2 *productCategory2 = _productCategory2List[row];
+        return productCategory2.name;
+    }
+    else if([txtEvent isFirstResponder])
+    {
+        Event *event = _eventListNowAndFutureAsc[row];
+        return event.location;
+    }
+    
+    return @"";
+    
 }
 
 // tell the picker the width of each row for a given component

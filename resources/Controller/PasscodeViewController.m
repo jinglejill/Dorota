@@ -109,7 +109,7 @@
             Setting *setting = [Utility getSetting:vAdminDeviceToken];
             setting.value = [Utility deviceToken];
             setting.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
-            
+            setting.modifiedUser = [Utility modifiedUser];
             [_homeModel updateItems:dbSettingDeviceToken withData:setting];
         }
         

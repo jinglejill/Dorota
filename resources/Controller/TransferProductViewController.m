@@ -232,6 +232,7 @@
         {
             item.eventID = [_strEventIDDestination integerValue];
             item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            item.modifiedUser = [Utility modifiedUser];
         }
     }
 }

@@ -16,6 +16,8 @@
 
 #define tBlueColor          [UIColor colorWithRed:0/255.0 green:123/255.0 blue:255/255.0 alpha:1]
 #define tYellow          [UIColor colorWithRed:251/255.0 green:188/255.0 blue:5/255.0 alpha:1]
+#define tTheme          [UIColor colorWithRed:196/255.0 green:164/255.0 blue:168/255.0 alpha:1]
+
 
 @interface ProductNameDetailEditViewController ()
 {
@@ -56,7 +58,8 @@
     if([arrProductSalesID count]==1)
     {
         //get product sales to show
-        ProductSales *productSales = [self getProductSales:[arrProductSalesID[0] integerValue] fromList:productNameDetailList];;
+        ProductSales *selectedProductSales = arrProductSalesID[0];
+        ProductSales *productSales = [self getProductSales:selectedProductSales.productSalesID fromList:productNameDetailList];;
         if(indexPath.row == 0)
         {
             txtPrice.text = productSales.price;
@@ -208,7 +211,7 @@
     swtPrice = [[UISwitch alloc] initWithFrame: framePrice];
     swtPrice.on = YES;
     [swtPrice setSelected:YES];
-    [swtPrice setOnTintColor:tYellow];
+    [swtPrice setOnTintColor:tTheme];
     [self.view addSubview: swtPrice];
     [swtPrice addTarget:self action:@selector(switchTwisted:) forControlEvents:UIControlEventValueChanged];
     
@@ -216,14 +219,14 @@
     swtDetail = [[UISwitch alloc] initWithFrame: frameDetail];
     swtDetail.on = YES;
     [swtDetail setSelected:YES];
-    [swtDetail setOnTintColor:tYellow];
+    [swtDetail setOnTintColor:tTheme];
     [self.view addSubview: swtDetail];
     [swtDetail addTarget:self action:@selector(switchTwisted:) forControlEvents:UIControlEventValueChanged];
     
     CGRect frameImage = CGRectMake(controlXOriginSwt, controlYOriginSwt+44+132, widthSwt, heightSwt);
     swtImage = [[UISwitch alloc] initWithFrame: frameImage];
     swtImage.on = YES;
-    [swtImage setOnTintColor:tYellow];
+    [swtImage setOnTintColor:tTheme];
     [self.view addSubview: swtImage];
     [swtImage addTarget:self action:@selector(switchTwisted:) forControlEvents:UIControlEventValueChanged];
     [self loadViewProcess];
@@ -485,7 +488,8 @@
                 [_homeModel uploadPhoto:imgData fileName:imageFileName];
             }
     
-            ProductSales *productSales = [self getProductSales:[arrProductSalesID[0] integerValue] fromList:productNameDetailList];
+            ProductSales *selectedProductSales = arrProductSalesID[0];
+            ProductSales *productSales = [self getProductSales:selectedProductSales.productSalesID fromList:productNameDetailList];
             productSales.price = swtPrice.on?[self getPrice]:productSales.price;
             productSales.detail = swtDetail.on?[Utility trimString:txVwDetail.text]:productSales.detail;
             productSales.pricePromotion = productSales.price;
@@ -505,6 +509,7 @@
                         item.detail = productSales.detail;
                         item.imageDefault = productSales.imageDefault;
                         item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        item.modifiedUser = [Utility modifiedUser];
                         [productSalesUpdateList addObject:item];
                         break;
                     }
@@ -536,9 +541,10 @@
             
             if(swtPrice.on || swtDetail.on || swtImage.on)
             {
-                for(NSString *strProductSalesID in arrProductSalesID)
+//                for(NSString *strProductSalesID in arrProductSalesID)
+                for(ProductSales *item in arrProductSalesID)
                 {
-                    ProductSales *productSales = [self getProductSales:[strProductSalesID integerValue] fromList:productNameDetailList];
+                    ProductSales *productSales = [self getProductSales:item.productSalesID fromList:productNameDetailList];
                     productSales.price = swtPrice.on?[self getPrice]:productSales.price;
                     productSales.detail = swtDetail.on?[Utility trimString:txVwDetail.text]:productSales.detail;
                     productSales.pricePromotion = productSales.price;
@@ -558,6 +564,7 @@
                             item.detail = productSales.detail;
                             item.imageDefault = productSales.imageDefault;
                             item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                            item.modifiedUser = [Utility modifiedUser];
                             break;
                         }
                     }

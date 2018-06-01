@@ -159,11 +159,6 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    
-//    ProductCategory2 *productCategory2 = _productCategory2List[_selectedProductCategory2];
-//    txtMainCategory.text = productCategory2.name;
-//    [self queryProduct:productCategory2.code dateIn:[Utility formatDate:txtDateIn.text fromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-MM-dd HH:mm:ss"]];
 }
 
 -(void)queryProduct:(NSString *)productCategory2 dateIn:(NSString *)dateIn

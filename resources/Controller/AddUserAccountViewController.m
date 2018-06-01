@@ -76,6 +76,7 @@
         userAccount.username = txtEmailAddress.text;
         userAccount.password = txtPassword.text;
         userAccount.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        userAccount.modifiedUser = [Utility modifiedUser];
     }
     else if([sender isEqual:btnBack])
     {

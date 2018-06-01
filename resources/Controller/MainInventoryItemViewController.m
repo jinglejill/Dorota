@@ -624,6 +624,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                                 productDelete.size = productDeleteItem.size;
                                 productDelete.manufacturingDate = productDeleteItem.manufacturingDate;
                                 productDelete.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                productDelete.modifiedUser = [Utility modifiedUser];
                                 [arrProduct addObject: productDeleteItem];
                                 [arrProductDelete addObject:productDelete];
                                 [_homeModel deleteItems:dbProduct withData:@[arrProduct,arrProductDelete]];

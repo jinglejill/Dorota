@@ -263,7 +263,7 @@
     
     float controlWidth = self.tableView.bounds.size.width - 40*2;//minus left, right margin
     float controlXOrigin = 15;
-    float controlYOrigin = 20+(self.tableView.rowHeight - 25)/2;//table row height minus control height and set vertical center
+    float controlYOrigin = (self.tableView.rowHeight - 25)/2;//table row height minus control height and set vertical center
     
     
     txtFirstName = [[UITextField alloc] initWithFrame:CGRectMake(controlXOrigin, controlYOrigin, controlWidth, 25)];
@@ -448,7 +448,7 @@
     {
         NSString *searchedString = txtVwAddress.text;
         NSRange   searchedRange = NSMakeRange(0, [searchedString length]);
-        NSString *pattern = @"(ชื่อ : (\\w|\\W)*เบอร์โทร)|(Name : (\\w|\\W)*Tel)";
+        NSString *pattern = @"(ชื่อ : (\\w|\\W)*เบอร์โทร)|(Name : (\\w|\\W)*Tel)|ชื่อ(\\w|\\W)*ที่อยู่";
         NSError  *error = nil;
         
         NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:0 error:&error];
@@ -460,8 +460,12 @@
             txtVwAddress.text = [txtVwAddress.text stringByReplacingOccurrencesOfString:matchText withString:@""];
             
             
+            matchText = [matchText stringByReplacingOccurrencesOfString:@"ชื่อ" withString:@""];
             matchText = [matchText stringByReplacingOccurrencesOfString:@"ชื่อ : " withString:@""];
             matchText = [matchText stringByReplacingOccurrencesOfString:@"Name : " withString:@""];
+            matchText = [matchText stringByReplacingOccurrencesOfString:@"ที่อยู่" withString:@""];
+            matchText = [matchText stringByTrimmingCharactersInSet:
+                         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
             txtFirstName.text = matchText;
             break;
         }
@@ -470,7 +474,7 @@
     //address
     {
         //delete keyword
-        NSArray *arrKeyword = @[@"ที่อยู่ : ",@"address : ",@"ที่อยู่ "];
+        NSArray *arrKeyword = @[@"\n\t\nที่อยู่\t",@"ที่อยู่\t",@"ที่อยู่ : ",@"address : ",@"ที่อยู่ "];
         txtVwAddress.text = [Utility removeKeyword:arrKeyword text:txtVwAddress.text];
     }
     
@@ -512,7 +516,7 @@
             
             
             //delete keyword
-            NSArray *arrKeyword = @[@"มือถือ",@"โทรศัพท์",@"เบอร์โทร : ",@"เบอร์โทร :",@"โทร.",@"โทร",@"ติดต่อ ",@"telephone",@"Tel : ",@"Tel :",@"tel.",@"tel"];
+            NSArray *arrKeyword = @[@",มือถือ : ",@",มือถือ :",@"มือถือ",@"โทรศัพท์",@"เบอร์โทร : ",@"เบอร์โทร :",@"โทร : ",@"โทร :",@"โทร.",@"โทร",@"ติดต่อ\t",@"ติดต่อ ",@"telephone",@"Tel : ",@"Tel :",@"tel.",@"tel"];
             txtVwAddress.text = [Utility removeKeyword:arrKeyword text:txtVwAddress.text];
             
             
@@ -549,7 +553,7 @@
     }
     
     //email
-    {        
+    {
         NSString *searchedString = txtVwAddress.text;
         NSRange   searchedRange = NSMakeRange(0, [searchedString length]);
         NSString *pattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
@@ -564,7 +568,7 @@
             
             
             //delete keyword
-            NSArray *arrKeyword = @[@"อีเมล์ : ",@"อีเมล : ",@"อีเมล",@"Email : ",@"Email"];
+            NSArray *arrKeyword = @[@",อีเมล์ : ",@",อีเมล์ :",@"อีเมล์ : ",@"อีเมล์ :",@"อีเมล",@"Email : ",@"Email"];
             txtVwAddress.text = [Utility removeKeyword:arrKeyword text:txtVwAddress.text];
             break;
         }
@@ -588,7 +592,7 @@
     }
     
     txtVwAddress.text = [txtVwAddress.text stringByTrimmingCharactersInSet:
-                         [NSCharacterSet whitespaceAndNewlineCharacterSet]];    
+                         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     
     //find postcode then put in txtpostcode and delete from vwaddress
@@ -857,6 +861,7 @@
                         _postCustomer = [[PostCustomer alloc]init];
                         _postCustomer.postCustomerID = [Utility getNextID:tblPostCustomer];
                         _postCustomer.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        _postCustomer.modifiedUser = [Utility modifiedUser];
                         [self assignTextToPostCustomer:_postCustomer];
                         _postCustomer.customerID = [PostCustomer getCustomerID:_postCustomer.telephone];
                         
@@ -865,6 +870,7 @@
                         customerReceipt.receiptID = receiptID;
                         customerReceipt.postCustomerID = _postCustomer.postCustomerID;
                         customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        customerReceipt.modifiedUser = [Utility modifiedUser];
                         
                         
                         NSMutableArray *data = [[NSMutableArray alloc]init];
@@ -884,6 +890,7 @@
                     _postCustomer = [[PostCustomer alloc]init];
                     _postCustomer.postCustomerID = [Utility getNextID:tblPostCustomer];
                     _postCustomer.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    _postCustomer.modifiedUser = [Utility modifiedUser];
                     [self assignTextToPostCustomer:_postCustomer];
                     _postCustomer.customerID = [PostCustomer getCustomerID:_postCustomer.telephone];
                     
@@ -892,6 +899,7 @@
                     customerReceipt.receiptID = receiptID;
                     customerReceipt.postCustomerID = _postCustomer.postCustomerID;
                     customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    customerReceipt.modifiedUser = [Utility modifiedUser];
                     
                     
                     NSMutableArray *data = [[NSMutableArray alloc]init];
@@ -935,6 +943,7 @@
                         _postCustomer = [[PostCustomer alloc]init];
                         _postCustomer.postCustomerID = [Utility getNextID:tblPostCustomer];
                         _postCustomer.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        _postCustomer.modifiedUser = [Utility modifiedUser];
                         [self assignTextToPostCustomer:_postCustomer];
                         _postCustomer.customerID = [PostCustomer getCustomerID:_postCustomer.telephone];
                         
@@ -943,6 +952,7 @@
                         customerReceipt.receiptID = receiptID;
                         customerReceipt.postCustomerID = _postCustomer.postCustomerID;
                         customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        customerReceipt.modifiedUser = [Utility modifiedUser];
                         
                         
                         NSMutableArray *data = [[NSMutableArray alloc]init];
@@ -962,6 +972,7 @@
                     _postCustomer = [[PostCustomer alloc]init];
                     _postCustomer.postCustomerID = [Utility getNextID:tblPostCustomer];
                     _postCustomer.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    _postCustomer.modifiedUser = [Utility modifiedUser];
                     [self assignTextToPostCustomer:_postCustomer];
                     _postCustomer.customerID = [PostCustomer getCustomerID:_postCustomer.telephone];
                     
@@ -970,6 +981,7 @@
                     customerReceipt.receiptID = receiptID;
                     customerReceipt.postCustomerID = _postCustomer.postCustomerID;
                     customerReceipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    customerReceipt.modifiedUser = [Utility modifiedUser];
                     
                     
                     NSMutableArray *data = [[NSMutableArray alloc]init];
@@ -1037,6 +1049,7 @@
         {
             item.postCustomerID = customerReceipt.postCustomerID;
             item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            item.modifiedUser = [Utility modifiedUser];
             break;
         }
     }
@@ -1169,8 +1182,8 @@
         self.searchBar.barTintColor         = [UIColor grayColor];
         self.searchBar.delegate             = self;
         self.searchBar.placeholder          = @"search mobile no.";
-        
-        
+        self.searchBar.delegate = self;
+        self.searchBar.keyboardType = UIKeyboardTypeNumberPad;
         [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor grayColor]];
     }
     
@@ -1179,6 +1192,7 @@
     }
 }
 #pragma mark - search
+
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
     NSPredicate *resultPredicate   = [NSPredicate predicateWithFormat:@"_telephone contains[c] %@", searchText];
     self.dataSourceForSearchResult = [[_postCustomerList filteredArrayUsingPredicate:resultPredicate] mutableCopy];

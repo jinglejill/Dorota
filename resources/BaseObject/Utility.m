@@ -9,8 +9,8 @@
 #import "Utility.h"
 #import "Message.h"
 #import "Setting.h"
-#import "RNEncryptor.h"
-#import "RNDecryptor.h"
+//#import "RNEncryptor.h"
+//#import "RNDecryptor.h"
 #import "Event.h"
 #import <objc/runtime.h>
 #import "ProductWithQuantity.h"
@@ -202,358 +202,361 @@ extern NSString *globalModifiedUser;
     switch (eUrl)
     {
         case urlUserAccountInsert:
-            url = @"/SAIM/SAIMUserAccountInsert.php";
+            url = @"/DOROTA/SAIMUserAccountInsert.php";
             break;
         case urlUserAccountUpdate:
-            url = @"/SAIM/SAIMUserAccountUpdate.php";
+            url = @"/DOROTA/SAIMUserAccountUpdate.php";
             break;
         case urlUserAccountDelete:
-            url = @"/SAIM/SAIMUserAccountDelete.php";
+            url = @"/DOROTA/SAIMUserAccountDelete.php";
             break;
         case urlMessageGet:
-            url = @"/SAIM/SAIMMessageGet.php?%@";
+            url = @"/DOROTA/SAIMMessageGet.php?%@";
             break;
         case urlSendEmail:
-            url = @"/SAIM/sendEmail.php";
+            url = @"/DOROTA/sendEmail.php";
             break;
         case urlEventInsert:
-            url = @"/SAIM/SAIMEventInsert.php";
+            url = @"/DOROTA/SAIMEventInsert.php";
             break;
         case urlEventUpdate:
-            url = @"/SAIM/SAIMEventUpdate.php";
+            url = @"/DOROTA/SAIMEventUpdate.php";
             break;
         case urlEventDelete:
-            url = @"/SAIM/SAIMEventDelete.php";
+            url = @"/DOROTA/SAIMEventDelete.php";
             break;
         case urlProductInsert:
-            url = @"/SAIM/SAIMProductInsert.php";
+            url = @"/DOROTA/SAIMProductInsert.php";
             break;
         case urlProductUpdate:
-            url = @"/SAIM/SAIMProductUpdate.php";
+            url = @"/DOROTA/SAIMProductUpdate.php";
             break;
         case urlProductDelete:
-            url = @"/SAIM/SAIMProductDelete.php";
+            url = @"/DOROTA/SAIMProductDelete.php";
             break;
         case urlCashAllocationInsert:
-            url = @"/SAIM/SAIMCashAllocationInsert.php";
+            url = @"/DOROTA/SAIMCashAllocationInsert.php";
             break;
         case urlCashAllocationUpdate:
-            url = @"/SAIM/SAIMCashAllocationUpdate.php";
+            url = @"/DOROTA/SAIMCashAllocationUpdate.php";
             break;
         case urlPostCustomerInsert:
-            url = @"/SAIM/SAIMPostCustomerInsert.php";
+            url = @"/DOROTA/SAIMPostCustomerInsert.php";
             break;
         case urlPostCustomerUpdate:
-            url = @"/SAIM/SAIMPostCustomerUpdate.php";
+            url = @"/DOROTA/SAIMPostCustomerUpdate.php";
             break;
         case urlPostCustomerDelete:
-            url = @"/SAIM/SAIMPostCustomerDelete.php";
+            url = @"/DOROTA/SAIMPostCustomerDelete.php";
             break;
         case urlCustomMadeInsert:
-            url = @"/SAIM/SAIMCustomMadeInsert.php";
+            url = @"/DOROTA/SAIMCustomMadeInsert.php";
             break;
         case urlCustomMadeDelete:
-            url = @"/SAIM/SAIMCustomMadeDelete.php";
+            url = @"/DOROTA/SAIMCustomMadeDelete.php";
             break;
         case urlProductEventIDUpdate:
-            url = @"/SAIM/SAIMProductEventIDUpdate.php";
+            url = @"/DOROTA/SAIMProductEventIDUpdate.php";
             break;
         case urlProductStatusUpdateByProductID:
-            url = @"/SAIM/SAIMProductStatusUpdateByProductID.php";
+            url = @"/DOROTA/SAIMProductStatusUpdateByProductID.php";
             break;
         case urlProductEventIDUpdateByProductID:
-            url = @"/SAIM/SAIMProductEventIDUpdateByProductID.php";
+            url = @"/DOROTA/SAIMProductEventIDUpdateByProductID.php";
             break;
         case urlUserAccountEventDeleteThenMultipleInsert:
-            url = @"/SAIM/SAIMUserAccountEventDeleteThenMultipleInsert.php";
+            url = @"/DOROTA/SAIMUserAccountEventDeleteThenMultipleInsert.php";
             break;
         case urlUserAccountEventDelete:
-            url = @"/SAIM/SAIMUserAccountEventDelete.php";
+            url = @"/DOROTA/SAIMUserAccountEventDelete.php";
             break;
         case urlReceiptAndProductBuyInsert:
-            url = @"/SAIM/SAIMReceiptAndProductBuyInsert.php";
+            url = @"/DOROTA/SAIMReceiptAndProductBuyInsert.php";
             break;
         case urlReceiptAndReceiptProductItemDelete:
-            url = @"/SAIM/SAIMReceiptAndReceiptProductItemDelete.php";
+            url = @"/DOROTA/SAIMReceiptAndReceiptProductItemDelete.php";
             break;
         case urlMasterGet:
-            url = @"/SAIM/SAIMMasterGet.php?%@";
+            url = @"/DOROTA/SAIMMasterGet.php?%@";
             break;        
         case urlReceiptProductItemAndProductUpdate:
-            url = @"/SAIM/SAIMReceiptProductItemAndProductUpdate.php";
+            url = @"/DOROTA/SAIMReceiptProductItemAndProductUpdate.php";
             break;
         case urlCompareInventoryInsert:
-            url = @"/SAIM/SAIMCompareInventoryInsert.php";
+            url = @"/DOROTA/SAIMCompareInventoryInsert.php";
             break;
         case urlCompareInventoryUpdate:
-            url = @"/SAIM/SAIMCompareInventoryUpdate.php";
+            url = @"/DOROTA/SAIMCompareInventoryUpdate.php";
             break;
         case urlCompareInventoryNotMatchInsert:
-            url = @"/SAIM/SAIMCompareInventoryNotMatchInsert.php";
+            url = @"/DOROTA/SAIMCompareInventoryNotMatchInsert.php";
             break;
         case urlProductSalesSetInsert:
-            url = @"/SAIM/SAIMProductSalesSetInsert.php";
+            url = @"/DOROTA/SAIMProductSalesSetInsert.php";
             break;
         case urlProductSalesSetDelete:
-            url = @"/SAIM/SAIMProductSalesSetDelete.php";
+            url = @"/DOROTA/SAIMProductSalesSetDelete.php";
             break;
         case urlProductSalesSetUpdate:
-            url = @"/SAIM/SAIMProductSalesSetUpdate.php";
+            url = @"/DOROTA/SAIMProductSalesSetUpdate.php";
             break;
         case urlProductSalesUpdate:
-            url = @"/SAIM/SAIMProductSalesUpdate.php";
+            url = @"/DOROTA/SAIMProductSalesUpdate.php";
             break;
         case urlProductSalesMultipleUpdate:
-            url = @"/SAIM/SAIMProductSalesMultipleUpdate.php";
+            url = @"/DOROTA/SAIMProductSalesMultipleUpdate.php";
             break;
         case urlReceiptProductItemPreOrder:
-            url = @"/SAIM/SAIMReceiptProductItemPreOrder.php";
+            url = @"/DOROTA/SAIMReceiptProductItemPreOrder.php";
             break;
         case urlReceiptProductItemPreOrderCM:
-            url = @"/SAIM/SAIMReceiptProductItemPreOrderCM.php";
+            url = @"/DOROTA/SAIMReceiptProductItemPreOrderCM.php";
             break;
         case urlCustomerReceiptUpdatePostCustomerID:
-            url = @"/SAIM/SAIMCustomerReceiptUpdatePostCustomerID.php";
+            url = @"/DOROTA/SAIMCustomerReceiptUpdatePostCustomerID.php";
             break;
         case urlCustomerReceiptUpdateTrackingNo:
-            url = @"/SAIM/SAIMCustomerReceiptUpdateTrackingNo.php";
+            url = @"/DOROTA/SAIMCustomerReceiptUpdateTrackingNo.php";
             break;
         case urlReceiptProductItemUnpost:
-            url = @"/SAIM/SAIMReceiptProductItemUnpost.php";
+            url = @"/DOROTA/SAIMReceiptProductItemUnpost.php";
             break;
         case urlReceiptProductItemUnpostCM:
-            url = @"/SAIM/SAIMReceiptProductItemUnpostCM.php";
+            url = @"/DOROTA/SAIMReceiptProductItemUnpostCM.php";
             break;
         case urlProductCostUpdate:
-            url = @"/SAIM/SAIMProductCostUpdate.php";
+            url = @"/DOROTA/SAIMProductCostUpdate.php";
             break;
         case urlEventCostInsert:
-            url = @"/SAIM/SAIMEventCostInsert.php";
+            url = @"/DOROTA/SAIMEventCostInsert.php";
             break;
         case urlEventCostDelete:
-            url = @"/SAIM/SAIMEventCostDelete.php";
+            url = @"/DOROTA/SAIMEventCostDelete.php";
             break;
         case urlProductCategory2Delete:
-            url = @"/SAIM/SAIMProductCategory2Delete.php";
+            url = @"/DOROTA/SAIMProductCategory2Delete.php";
             break;
         case urlProductCategory2Update:
-            url = @"/SAIM/SAIMProductCategory2Update.php";
+            url = @"/DOROTA/SAIMProductCategory2Update.php";
             break;
         case urlProductCategory2Insert:
-            url = @"/SAIM/SAIMProductCategory2Insert.php";
+            url = @"/DOROTA/SAIMProductCategory2Insert.php";
             break;
         case urlProductCategory1Update:
-            url = @"/SAIM/SAIMProductCategory1Update.php";
+            url = @"/DOROTA/SAIMProductCategory1Update.php";
             break;
         case urlProductCategory1Insert:
-            url = @"/SAIM/SAIMProductCategory1Insert.php";
+            url = @"/DOROTA/SAIMProductCategory1Insert.php";
             break;
         case urlProductCategory1Delete:
-            url = @"/SAIM/SAIMProductCategory1Delete.php";
+            url = @"/DOROTA/SAIMProductCategory1Delete.php";
             break;
         case urlColorDelete:
-            url = @"/SAIM/SAIMColorDelete.php";
+            url = @"/DOROTA/SAIMColorDelete.php";
             break;
         case urlColorUpdate:
-            url = @"/SAIM/SAIMColorUpdate.php";
+            url = @"/DOROTA/SAIMColorUpdate.php";
             break;
         case urlColorInsert:
-            url = @"/SAIM/SAIMColorInsert.php";
+            url = @"/DOROTA/SAIMColorInsert.php";
             break;
         case urlProductSizeDelete:
-            url = @"/SAIM/SAIMProductSizeDelete.php";
+            url = @"/DOROTA/SAIMProductSizeDelete.php";
             break;
         case urlProductSizeUpdate:
-            url = @"/SAIM/SAIMProductSizeUpdate.php";
+            url = @"/DOROTA/SAIMProductSizeUpdate.php";
             break;
         case urlProductSizeInsert:
-            url = @"/SAIM/SAIMProductSizeInsert.php";
+            url = @"/DOROTA/SAIMProductSizeInsert.php";
             break;
         case urlProductDeleteFromEvent:
-            url = @"/SAIM/SAIMProductDeleteFromEvent.php";
+            url = @"/DOROTA/SAIMProductDeleteFromEvent.php";
             break;
         case urlProductNameDelete:
-            url = @"/SAIM/SAIMProductNameDelete.php";
+            url = @"/DOROTA/SAIMProductNameDelete.php";
             break;
         case urlProductNameInsert:
-            url = @"/SAIM/SAIMProductNameInsert.php";
+            url = @"/DOROTA/SAIMProductNameInsert.php";
             break;
         case urlProductNameUpdate:
-            url = @"/SAIM/SAIMProductNameUpdate.php";
+            url = @"/DOROTA/SAIMProductNameUpdate.php";
             break;
         case urlProductSalesInsert:
-            url = @"/SAIM/SAIMProductSalesInsert.php";
+            url = @"/DOROTA/SAIMProductSalesInsert.php";
             break;
         case urlProductSalesDelete:
-            url = @"/SAIM/SAIMProductSalesDelete.php";
+            url = @"/DOROTA/SAIMProductSalesDelete.php";
             break;
         case urlUploadPhoto:
-            url = @"/SAIM/uploadPhoto.php";
+            url = @"/DOROTA/uploadPhoto.php";
             break;
         case urlDownloadPhoto:
-            url = @"/SAIM/downloadImage.php";
+            url = @"/DOROTA/downloadImage.php";
             break;
         case urlProductSalesUpdateDetail:
-            url = @"/SAIM/SAIMProductSalesUpdateDetail.php";
+            url = @"/DOROTA/SAIMProductSalesUpdateDetail.php";
             break;
         case urlProductSalesUpdateCost:
-            url = @"/SAIM/SAIMProductSalesUpdateCost.php";
+            url = @"/DOROTA/SAIMProductSalesUpdateCost.php";
             break;
         case urlProductSalesUpdateCostMultiple:
-            url = @"/SAIM/SAIMProductSalesUpdateCostMultiple.php";
+            url = @"/DOROTA/SAIMProductSalesUpdateCostMultiple.php";
             break;
         case urlImageRunningIDInsert:
-            url = @"/SAIM/SAIMImageRunningIDInsert.php?1";
+            url = @"/DOROTA/SAIMImageRunningIDInsert.php?1";
             break;
         case urlGenerateSalesAllEvent:
-            url = @"/SAIM/generateSalesAllEvents.php";
+            url = @"/DOROTA/generateSalesAllEvents.php";
             break;
         case urlDownloadFile:
-            url = @"/SAIM/downloadFile.php";
+            url = @"/DOROTA/downloadFile.php";
             break;
         case urlProductSalesDeleteProductNameID:
-            url = @"/SAIM/SAIMProductSalesDeleteProductNameID.php";
+            url = @"/DOROTA/SAIMProductSalesDeleteProductNameID.php";
             break;
         case urlUserAccountDeviceTokenUpdate:
-            url = @"/SAIM/SAIMUserAccountDeviceTokenUpdate.php";
+            url = @"/DOROTA/SAIMUserAccountDeviceTokenUpdate.php";
             break;
         case urlSettingDeviceTokenUpdate:
-            url = @"/SAIM/SAIMSettingDeviceTokenUpdate.php";
+            url = @"/DOROTA/SAIMSettingDeviceTokenUpdate.php";
             break;
         case urlSettingUpdate:
-            url = @"/SAIM/SAIMSettingUpdate.php";
+            url = @"/DOROTA/SAIMSettingUpdate.php";
             break;
         case urlLoginInsert:
-            url = @"/SAIM/SAIMLoginInsert.php";
+            url = @"/DOROTA/SAIMLoginInsert.php";
             break;
 //        case urlPushSyncUpdate:
-//            url = @"/SAIM/SAIMPushSyncUpdate.php";
+//            url = @"/DOROTA/SAIMPushSyncUpdate.php";
 //            break;
         case urlPushSyncSync:
-            url = @"/SAIM/SAIMPushSyncSync.php";
+            url = @"/DOROTA/SAIMPushSyncSync.php";
             break;
         case urlPushSyncUpdateByDeviceToken:
-            url = @"/SAIM/SAIMPushSyncUpdateByDeviceToken.php";
+            url = @"/DOROTA/SAIMPushSyncUpdateByDeviceToken.php";
             break;
         case urlReceiptUpdate:
-            url = @"/SAIM/SAIMReceiptUpdate.php";
+            url = @"/DOROTA/SAIMReceiptUpdate.php";
             break;
         case urlCustomMadeUpdate:
-            url = @"/SAIM/SAIMCustomMadeUpdate.php";
+            url = @"/DOROTA/SAIMCustomMadeUpdate.php";
             break;
         case urlReceiptProductItemUpdateCMIn:
-            url = @"/SAIM/SAIMReceiptProductItemUpdateCMIn.php";
+            url = @"/DOROTA/SAIMReceiptProductItemUpdateCMIn.php";
             break;
         case urlSalesDetailGet:
-            url = @"/SAIM/SAIMSalesDetailGet.php?%@";
+            url = @"/DOROTA/SAIMSalesDetailGet.php?%@";
             break;
         case urlItemRunningIDInsert:
-            url = @"/SAIM/SAIMItemRunningIDInsert.php";
+            url = @"/DOROTA/SAIMItemRunningIDInsert.php";
             break;
         case urlUserAccountUpdateCountNotSeen:
-            url = @"/SAIM/SAIMUserAccountUpdateCountNotSeen.php";
+            url = @"/DOROTA/SAIMUserAccountUpdateCountNotSeen.php";
             break;
         case urlCredentialsValidate:
-            url = @"/SAIM/SAIMCredentialsValidate.php";
+            url = @"/DOROTA/SAIMCredentialsValidate.php";
             break;
         case urlProductStatusGet:
-            url = @"/SAIM/SAIMProductStatusGet.php";
+            url = @"/DOROTA/SAIMProductStatusGet.php";
             break;
         case urlSalesSummaryGet:
-            url = @"/SAIM/SAIMSalesSummaryGet.php?%@";
+            url = @"/DOROTA/SAIMSalesSummaryGet.php?%@";
             break;
         case urlSalesSummaryByPeriodGet:
-            url = @"/SAIM/SAIMSalesSummaryByPeriodGet.php?%@";
+            url = @"/DOROTA/SAIMSalesSummaryByPeriodGet.php?%@";
             break;
         case urlDeviceInsert:
-            url = @"/SAIM/SAIMDeviceInsert.php";
+            url = @"/DOROTA/SAIMDeviceInsert.php";
             break;
         case urlAccountInventoryInsert:
-            url = @"/SAIM/SAIMAccountInventoryInsert.php";
+            url = @"/DOROTA/SAIMAccountInventoryInsert.php";
             break;
         case urlAccountInventorySummary:
-            url = @"/SAIM/SAIMAccountInventorySummaryGet.php?%@";
+            url = @"/DOROTA/SAIMAccountInventorySummaryGet.php?%@";
             break;
         case urlPostCustomerByReceiptID:
-            url = @"/SAIM/SAIMPostCustomerByReceiptIDGet.php?%@";
+            url = @"/DOROTA/SAIMPostCustomerByReceiptIDGet.php?%@";
             break;
         case urlAccountReceiptInsert:
-            url = @"/SAIM/SAIMAccountReceiptInsert.php";
+            url = @"/DOROTA/SAIMAccountReceiptInsert.php";
             break;
         case urlAccountInventoryAdded:
-            url = @"/SAIM/SAIMAccountInventoryAddedGet.php?%@";
+            url = @"/DOROTA/SAIMAccountInventoryAddedGet.php?%@";
             break;
         case urlAccountInventoryDelete:
-            url = @"/SAIM/SAIMAccountInventoryDelete.php";
+            url = @"/DOROTA/SAIMAccountInventoryDelete.php";
             break;
         case urlAccountReceiptHistoryGet:
-            url = @"/SAIM/SAIMAccountReceiptHistoryGet.php?%@";
+            url = @"/DOROTA/SAIMAccountReceiptHistoryGet.php?%@";
             break;
         case urlAccountReceiptHistoryDelete:
-            url = @"/SAIM/SAIMAccountReceiptHistoryDelete.php";
+            url = @"/DOROTA/SAIMAccountReceiptHistoryDelete.php";
             break;
         case urlAccountReceiptHistoryDetailGet:
-            url = @"/SAIM/SAIMAccountReceiptHistoryDetailGet.php?%@";
+            url = @"/DOROTA/SAIMAccountReceiptHistoryDetailGet.php?%@";
             break;
         case urlAccountReceiptHistorySummaryGet:
-            url = @"/SAIM/SAIMAccountReceiptHistorySummaryGet.php?%@";
+            url = @"/DOROTA/SAIMAccountReceiptHistorySummaryGet.php?%@";
             break;
         case urlAccountReceiptHistorySummaryByDateGet:
-            url = @"/SAIM/SAIMAccountReceiptHistorySummaryByDateGet.php?%@";
+            url = @"/DOROTA/SAIMAccountReceiptHistorySummaryByDateGet.php?%@";
             break;
         case urlSalesByChannelGet:
-            url = @"/SAIM/SAIMSalesByChannelGet.php?%@";
+            url = @"/DOROTA/SAIMSalesByChannelGet.php?%@";
             break;
         case urlProductionOrderInsert:
-            url = @"/SAIM/SAIMProductionOrderInsert.php";
+            url = @"/DOROTA/SAIMProductionOrderInsert.php";
             break;
         case urlProductionOrderAdded:
-            url = @"/SAIM/SAIMProductionOrderAddedGet.php?%@";
+            url = @"/DOROTA/SAIMProductionOrderAddedGet.php?%@";
             break;
         case urlProductionOrderDelete:
-            url = @"/SAIM/SAIMProductionOrderDelete.php";
+            url = @"/DOROTA/SAIMProductionOrderDelete.php";
             break;
         case urlProductAndProductionOrderInsert:
-            url = @"/SAIM/SAIMProductAndProductionOrderInsert.php";
+            url = @"/DOROTA/SAIMProductAndProductionOrderInsert.php";
             break;
         case urlMemberAndPointGet:
-            url = @"/SAIM/SAIMMemberAndPointGet.php?%@";
+            url = @"/DOROTA/SAIMMemberAndPointGet.php?%@";
             break;
         case urlPushSyncUpdateTimeSynced:
-            url = @"/SAIM/SAIMPushSyncUpdateTimeSynced.php";
+            url = @"/DOROTA/SAIMPushSyncUpdateTimeSynced.php";
             break;
         case urlTransferHistoryGet:
-            url = @"/SAIM/SAIMTransferHistoryGet.php?%@";
+            url = @"/DOROTA/SAIMTransferHistoryGet.php?%@";
             break;
         case urlProductTransferGet:
-            url = @"/SAIM/SAIMProductTransferGet.php?%@";
+            url = @"/DOROTA/SAIMProductTransferGet.php?%@";
             break;
         case urlAccountReceiptByPeriod:
-            url = @"/SAIM/SAIMAccountReceiptByPeriodGet.php?%@";
+            url = @"/DOROTA/SAIMAccountReceiptByPeriodGet.php?%@";
             break;
         case urlReceiptByMember:
-            url = @"/SAIM/SAIMReceiptByMemberGet.php?%@";
+            url = @"/DOROTA/SAIMReceiptByMemberGet.php?%@";
             break;
         case urlRewardProgramGet:
-            url = @"/SAIM/SAIMRewardProgramGet.php?%@";
+            url = @"/DOROTA/SAIMRewardProgramGet.php?%@";
             break;
         case urlRewardProgramInsert:
-            url = @"/SAIM/SAIMRewardProgramInsert.php";
+            url = @"/DOROTA/SAIMRewardProgramInsert.php";
             break;
         case urlRewardProgramUpdate:
-            url = @"/SAIM/SAIMRewardProgramUpdate.php";
+            url = @"/DOROTA/SAIMRewardProgramUpdate.php";
             break;
         case urlRewardProgramDelete:
-            url = @"/SAIM/SAIMRewardProgramDelete.php";
+            url = @"/DOROTA/SAIMRewardProgramDelete.php";
             break;
         case urlReceiptProductItemPreOrderEventID:
-            url = @"/SAIM/SAIMReceiptProductItemPreOrderEventID.php";
+            url = @"/DOROTA/SAIMReceiptProductItemPreOrderEventID.php";
             break;
         case urlWriteLog:
-            url = @"/SAIM/SAIMWriteLog.php";
+            url = @"/DOROTA/SAIMWriteLog.php";
             break;
         case urlAccountReceiptGet:
-            url = @"/SAIM/SAIMAccountReceiptGet.php";
+            url = @"/DOROTA/SAIMAccountReceiptGet.php";
+            break;
+        case urlEmailQRCode:
+            url = @"/DOROTA/SAIMEmailQRCode.php";
             break;
         default:
             break;
@@ -623,27 +626,27 @@ extern NSString *globalModifiedUser;
     return date;
 }
 
-+(NSData *)encrypt:(NSString *)data
-{
-    NSData *nsData = [data dataUsingEncoding:NSUTF8StringEncoding];
-    NSError *error;
-    NSData *encryptedData = [RNEncryptor encryptData:nsData
-                                        withSettings:kRNCryptorAES256Settings
-                                            password:[self cipher]
-                                               error:&error];
-    return encryptedData;
-}
-
-+(NSString *)decrypt:(NSData *)encryptedData
-{
-    NSError *error;
-    NSData *decryptedData = [RNDecryptor decryptData:encryptedData
-                                        withPassword:[self cipher]
-                                               error:&error];
-    NSString* strOriginal = [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding];
-
-    return strOriginal;
-}
+//+(NSData *)encrypt:(NSString *)data
+//{
+//    NSData *nsData = [data dataUsingEncoding:NSUTF8StringEncoding];
+//    NSError *error;
+//    NSData *encryptedData = [RNEncryptor encryptData:nsData
+//                                        withSettings:kRNCryptorAES256Settings
+//                                            password:[self cipher]
+//                                               error:&error];
+//    return encryptedData;
+//}
+//
+//+(NSString *)decrypt:(NSData *)encryptedData
+//{
+//    NSError *error;
+//    NSData *decryptedData = [RNDecryptor decryptData:encryptedData
+//                                        withPassword:[self cipher]
+//                                               error:&error];
+//    NSString* strOriginal = [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding];
+//
+//    return strOriginal;
+//}
 
 +(void)setCipher:(NSString *)cipher
 {
@@ -901,7 +904,7 @@ extern NSString *globalModifiedUser;
 + (NSString *) currentDateTimeStringForDB
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];// here set format which you want...
+    [dateFormatter setDateFormat:@"yyyyMMdd_HHmmss"];// here set format which you want...
     NSString *convertedString = [dateFormatter stringFromDate:[NSDate date]];
     return convertedString;
 }
@@ -1464,17 +1467,25 @@ extern NSString *globalModifiedUser;
 + (NSString *)getNextProductID
 {
     NSMutableArray *productList = [SharedProduct sharedProduct].productList;
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_productID" ascending:NO];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_productID" ascending:YES];
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor1, nil];
     NSArray *sortArray = [productList sortedArrayUsingDescriptors:sortDescriptors];
     if([sortArray count] == 0)
     {
-        return @"000000";
+        return @"-00001";
     }
     else
     {
         Product *product = sortArray[0];
-        return [NSString stringWithFormat:@"%06ld",[product.productID integerValue]+1];
+        if([product.productID integerValue]>0)
+        {
+            return @"-00001";
+        }
+        else
+        {
+            return [NSString stringWithFormat:@"%06ld",[product.productID integerValue]-1];
+//            return [NSString stringWithFormat:@"%06ld",[product.productID integerValue]+1];
+        }
     }
 }
 + (NSInteger)getNextID:(enum enumTableName)tableName
@@ -1613,21 +1624,26 @@ extern NSString *globalModifiedUser;
     
     
     NSString *strSortID = [NSString stringWithFormat:@"_%@",strNameID];
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:strSortID ascending:NO];
-    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor1, nil];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:strSortID ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
     NSArray *sortArray = [dataList sortedArrayUsingDescriptors:sortDescriptors];
     dataList = [sortArray mutableCopy];
     
     if([dataList count] == 0)
     {
-        return 1;
+        return -1;
     }
     else
     {
         id value = [dataList[0] valueForKey:strNameID];
-        NSString *strMaxID = value;
-        
-        return [strMaxID intValue]+1;
+        if([value integerValue]>0)
+        {
+            return -1;
+        }
+        else
+        {
+            return [value integerValue]-1;
+        }
     }
 }
 + (NSString *)makeFirstLetterLowerCase:(NSString *)text
@@ -1678,12 +1694,12 @@ extern NSString *globalModifiedUser;
 {
     return arrClassName[i];
 }
-+ (NSString *)getDecryptedHexString:(NSString *)hexString
-{
-    NSData *nsDataEncrypted = [self dataFromHexString:hexString];
-    NSString *decryptedString = [self decrypt:nsDataEncrypted];
-    return  decryptedString;
-}
+//+ (NSString *)getDecryptedHexString:(NSString *)hexString
+//{
+//    NSData *nsDataEncrypted = [self dataFromHexString:hexString];
+//    NSString *decryptedString = [self decrypt:nsDataEncrypted];
+//    return  decryptedString;
+//}
 + (BOOL)isValidProduct:(Product*)product error:(NSString **)error
 {
     //check productname,color,size,mfd,productid
@@ -1776,7 +1792,7 @@ extern NSString *globalModifiedUser;
     NSString *appKey;
     NSString *dbName = @"SAIM";
     NSString *strDBName = [NSString stringWithFormat:@"/%@/",dbName];
-    if([@"/SAIM/" isEqualToString:strDBName])
+    if([@"/DOROTA/" isEqualToString:strDBName])
     {
         appKey = @"wzksbywfw7kg52k";
     }
@@ -1793,7 +1809,7 @@ extern NSString *globalModifiedUser;
     NSString *appSecret;
     NSString *dbName = @"SAIM";
     NSString *strDBName = [NSString stringWithFormat:@"/%@/",dbName];
-    if([@"/SAIM/" isEqualToString:strDBName])
+    if([@"/DOROTA/" isEqualToString:strDBName])
     {
         appSecret = @"rny8l0357sss0pn";
     }
@@ -2414,9 +2430,177 @@ extern NSString *globalModifiedUser;
         [defaults setObject:dicPreOrderEventIDByUser forKey:@"PreOrderEventIDByUser"];
     }
     
-    
+
     return strEventID;
 
+}
+
++(NSDate *)getEndOfMonth:(NSDate *)date
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];//local time +7]
+    NSDateComponents *comps = [NSDateComponents new];
+    comps.month = 1;
+    NSDate *plusOneMonthDate = [calendar dateByAddingComponents:comps toDate:date options:0];
+    NSDate *date1OfMonthDate = [Utility getFirstDateOfMonth:plusOneMonthDate];
+    
+    
+    NSDateComponents *comps2 = [NSDateComponents new];
+    comps2.day = -1;
+    NSDate *endOfMonth = [calendar dateByAddingComponents:comps2 toDate:date1OfMonthDate options:0];
+    
+    
+    return endOfMonth;
+}
+
++(NSDate *)getFirstDateOfMonth:(NSDate *)date
+{
+    NSString *date1OfMonth = [Utility dateToString:date toFormat:@"yyyyMM01"];
+    NSDate *date1OfMonthDate = [Utility stringToDate:date1OfMonth fromFormat:@"yyyyMMdd"];
+    return date1OfMonthDate;
+}
+
++ (NSDate *) currentDateTime
+{
+    return [Utility GMTDate:[NSDate date]];
+}
+
++(NSArray *)jsonToArray:(NSArray *)arrDataJson arrClassName:(NSArray *)arrClassName
+{
+    NSMutableArray *arrItem = [[NSMutableArray alloc] init];
+    
+    
+    for(int i=0; i<[arrDataJson count]; i++)
+    {
+        //arrdatatemp <= arrdata
+        NSMutableArray *arrDataTemp = [[NSMutableArray alloc]init];
+        NSArray *arrData = arrDataJson[i];
+        for(int j=0; j< arrData.count; j++)
+        {
+            NSDictionary *jsonElement = arrData[j];
+            NSObject *object = [[NSClassFromString([Utility getMasterClassName:i from:arrClassName]) alloc] init];
+            
+            unsigned int propertyCount = 0;
+            objc_property_t * properties = class_copyPropertyList([object class], &propertyCount);
+            
+            for (unsigned int i = 0; i < propertyCount; ++i)
+            {
+                objc_property_t property = properties[i];
+                const char * name = property_getName(property);
+                NSString *key = [NSString stringWithUTF8String:name];
+                
+                
+                NSString *dbColumnName = [Utility makeFirstLetterUpperCase:key];
+                if(!jsonElement[dbColumnName])
+                {
+                    continue;
+                }
+                
+                
+                if([Utility isDateColumn:dbColumnName])
+                {
+                    NSDate *date = [Utility stringToDate:jsonElement[dbColumnName] fromFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    if(!date)
+                    {
+                        date = [Utility stringToDate:jsonElement[dbColumnName] fromFormat:@"yyyy-MM-dd"];
+                    }
+                    [object setValue:date forKey:key];
+                }
+                else
+                {
+                    [object setValue:jsonElement[dbColumnName] forKey:key];
+                }
+            }
+            
+            [arrDataTemp addObject:object];
+        }
+        [arrItem addObject:arrDataTemp];
     }
+    
+    return arrItem;
+}
+
++ (BOOL)isDateColumn:(NSString *)columnName
+{
+    if([columnName length] < 4)
+    {
+        return NO;
+    }
+    NSRange needleRange = NSMakeRange([columnName length]-4,4);
+    return [[columnName substringWithRange:needleRange] isEqualToString:@"Date"];
+}
+
++(void)addToSharedDataList:(NSArray *)items
+{
+    for(int j=0; j<[items count]; j++)
+    {
+        NSMutableArray *dataGetList = items[j];
+        for(int k=0; k<[dataGetList count]; k++)
+        {
+            NSObject *object = dataGetList[k];
+            NSString *className = NSStringFromClass([object class]);
+            NSString *strNameID = [Utility getPrimaryKeyFromClassName:className];
+            
+            
+            Class class = NSClassFromString([NSString stringWithFormat:@"Shared%@",className]);
+            SEL selector = NSSelectorFromString([NSString stringWithFormat:@"shared%@",className]);
+            SEL selectorList = NSSelectorFromString([NSString stringWithFormat:@"%@List",[Utility makeFirstLetterLowerCase:className]]);
+            NSMutableArray *dataList = [[class performSelector:selector] performSelector:selectorList];
+            
+            
+            if(![Utility duplicate:object])
+            {
+                [dataList addObject:object];
+            }
+        }
+    }
+}
+
+
++ (NSString *)getPrimaryKeyFromClassName:(NSString *)className
+{
+    NSRange needleRange;
+    needleRange = NSMakeRange(0,1);
+    NSString *firstLetter = [className substringWithRange:needleRange];
+    needleRange = NSMakeRange(1,[className length]-1);
+    NSString *theRestLetter = [className substringWithRange:needleRange];
+    return [NSString stringWithFormat:@"%@%@ID",[firstLetter lowercaseString],theRestLetter];
+}
+
++ (BOOL)duplicate:(NSObject *)object
+{
+    Class classDB = [object class];
+    NSString *className = NSStringFromClass(classDB);
+    Class class = NSClassFromString([NSString stringWithFormat:@"Shared%@",className]);
+    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"shared%@",className]);
+    SEL selectorList = NSSelectorFromString([NSString stringWithFormat:@"%@List",[Utility makeFirstLetterLowerCase:className]]);
+    NSMutableArray *dataList = [[class performSelector:selector] performSelector:selectorList];
+    
+    
+    NSString *propertyName = [NSString stringWithFormat:@"%@ID",[Utility makeFirstLetterLowerCase:className]];
+    NSString *propertyNamePredicate = [NSString stringWithFormat:@"_%@",propertyName];
+    NSInteger value = [[object valueForKey:propertyName] integerValue];
+    NSString *modifiedUser = [object valueForKey:@"modifiedUser"];
+    
+    
+    if([className isEqualToString:@"Menu"])
+    {
+        NSInteger branchID = [[object valueForKey:@"branchID"] integerValue];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %ld and _modifiedUser = %@ and _branchID = %ld",propertyNamePredicate,value,modifiedUser,branchID];
+        NSArray *filterArray = [dataList filteredArrayUsingPredicate:predicate];
+        
+        
+        return [filterArray count]>0;
+    }
+    else
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %ld and _modifiedUser = %@",propertyNamePredicate,value,modifiedUser];
+        NSArray *filterArray = [dataList filteredArrayUsingPredicate:predicate];
+        
+        
+        return [filterArray count]>0;
+    }
+    
+}
 @end
 

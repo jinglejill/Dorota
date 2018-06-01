@@ -408,7 +408,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
             if(item%countColumn==0 || item%countColumn==1 || item%countColumn==2 || item%countColumn==3)
             {
                 AccountInventorySummary *accountInventorySummary = _accountInventorySummaryList[item/countColumn-1];
-                NSLog(@"accountInventorySummary (item,item/countcolumn - 1): %ld,%ld",item,item/countColumn-1);
+//                NSLog(@"accountInventorySummary (item,item/countcolumn - 1): %ld,%ld",item,item/countColumn-1);
                 [cell addSubview:cell.label];
                 cell.label.frame = cell.bounds;
                 cell.label.font = [UIFont fontWithName:@".HelveticaNeueInterface-Light" size:13];

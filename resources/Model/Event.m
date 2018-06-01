@@ -49,6 +49,7 @@
         sharedMainEvent.periodTo = @"2100-12-31";
         sharedMainEvent.remark = @"";
         sharedMainEvent.modifiedDate = @"2000-01-01 00:00:00";
+        sharedMainEvent.modifiedUser = [Utility modifiedUser];
         sharedMainEvent.productSalesSetID = @"0";
     }
     return sharedMainEvent;

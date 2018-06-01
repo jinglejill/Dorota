@@ -8,7 +8,7 @@
 
 #import "Product.h"
 #import "SharedProduct.h"
-
+#import "Utility.h"
 
 @implementation Product
 - (id)init
@@ -25,13 +25,14 @@
     self.remark = @"";
     self.eventID = 0;
     self.modifiedDate = @"";
+    self.modifiedUser = [Utility modifiedUser];
     
     return self;
 }
 - (id)copyWithZone:(NSZone *)zone
 {
     // Copying code here.
-    id copy = [[[self class] alloc] init];
+    Product *copy = [[[self class] alloc] init];
     
     if (copy) {
         // Copy NSObject subclasses

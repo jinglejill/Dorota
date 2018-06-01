@@ -177,7 +177,9 @@ static NSString * const reuseIdentifier = @"Cell";
         }
         for(NSString *size in uniqueSize)
         {
-            [sizeList addObject:[Utility getSize:size]];
+            ProductSize *productSize = [Utility getSize:size];
+            productSize.intSizeOrder = [productSize.sizeOrder integerValue];
+            [sizeList addObject:productSize];
         }
         
         {
@@ -187,7 +189,7 @@ static NSString * const reuseIdentifier = @"Cell";
             colorList = [sortArray mutableCopy];
         }
         {
-            NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"sizeOrder" ascending:YES];
+            NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"intSizeOrder" ascending:YES];
             NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor1, nil];
             NSArray *sortArray = [sizeList sortedArrayUsingDescriptors:sortDescriptors];
             sizeList = [sortArray mutableCopy];
@@ -199,6 +201,19 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+
     
     // Register cell classes
     [colViewSummaryTable registerClass:[CustomUICollectionViewCellButton2 class] forCellWithReuseIdentifier:reuseIdentifier];
@@ -602,4 +617,32 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
      ];
 }
 
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets;
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0);
+    } else {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0);
+    }
+    
+    colViewSummaryTable.contentInset = contentInsets;
+    colViewSummaryTable.scrollIndicatorInsets = contentInsets;
+//    [colViewSummaryTable scrollToRowAtIndexPath:colViewSummaryTable.editingIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    colViewSummaryTable.contentInset = UIEdgeInsetsZero;
+    colViewSummaryTable.scrollIndicatorInsets = UIEdgeInsetsZero;
+    
+    
+//    NSNumber *rate = notification.userInfo[UIKeyboardAnimationDurationUserInfoKey];
+//    [UIView animateWithDuration:rate.floatValue animations:^{
+//        self.tableView.contentInset = // insert content inset value here
+//        self.tableView.scrollIndicatorInsets = // insert content inset value here
+//    }];
+}
 @end

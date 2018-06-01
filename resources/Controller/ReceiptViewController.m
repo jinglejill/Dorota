@@ -41,6 +41,7 @@
 #define orangeColor         [UIColor colorWithRed:253/255.0 green:182/255.0 blue:103/255.0 alpha:1]
 #define tBlueColor          [UIColor colorWithRed:0/255.0 green:123/255.0 blue:255/255.0 alpha:1]
 #define tYellow          [UIColor colorWithRed:251/255.0 green:188/255.0 blue:5/255.0 alpha:1]
+#define tTheme          [UIColor colorWithRed:196/255.0 green:164/255.0 blue:168/255.0 alpha:1]
 
 #define colorWithRGBHex(hex)[UIColor colorWithRed:((float)((hex&0xFF0000)>>16))/255.0 green:((float)((hex&0xFF00)>>8))/255.0 blue:((float)(hex&0xFF))/255.0 alpha:1.0]
 #define clearColorWithRGBHex(hex)[UIColor colorWithRed:MIN((((int)(hex>>16)&0xFF)/255.0)+.1,1.0)green:MIN((((int)(hex>>8)&0xFF)/255.0)+.1,1.0)blue:MIN((((int)(hex)&0xFF)/255.0)+.1,1.0)alpha:1.0]
@@ -169,8 +170,20 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     }
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
     
     // Register cell classes
     [colViewSummaryTable registerClass:[CustomUICollectionViewCellButton3 class] forCellWithReuseIdentifier:reuseIdentifier];
@@ -186,7 +199,8 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     self.navigationController.toolbarHidden = YES;
 }
@@ -1201,16 +1215,6 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
 {
     return _pointSpentActual;
 }
-//
-//- (void)updateTimeRewardUsedInCustomerTable:(NSInteger)timeRewardUsed
-//{
-//    if(customerTable.status == 2 || customerTable.status == 3)
-//    {
-//        customerTable.timeRewardUsed = timeRewardUsed;
-//        customerTable.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        [_homeModel updateItems:dbCustomerTable withData:customerTable];
-//    }
-//}
 
 - (void)redeemPointButtonClicked:(id)sender
 {
@@ -1681,6 +1685,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
             Product *product = [Product getProduct:productDetail.productID];
             product.status = @"S"; //update shared in the same time
             product.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            product.modifiedUser = [Utility modifiedUser];
             [arrProduct addObject:product];
             
             
@@ -1711,6 +1716,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
             Product *product = [Product getProduct:productDetail.productID];
             product.status = @"P"; //update shared in the same time
             product.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            product.modifiedUser = [Utility modifiedUser];
             [arrProduct addObject:product];
             
             
@@ -1803,7 +1809,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
     receipt.discountValue = _segConBahtPercent.selectedSegmentIndex==baht?[Utility removeComma:[self getStrFmtDiscountValue]]:@"0";
     receipt.discountPercent = _segConBahtPercent.selectedSegmentIndex==percent?_strDiscountValuePercent:@"0";
     receipt.discountReason = [Utility trimString:_txtDiscountReason.text];
-    receipt.receiptDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    receipt.receiptDate = [Utility dateToString:[Utility GMTDate:[NSDate date]] toFormat:@"yyyy-MM-dd HH:mm:ss"];
     receipt.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
     receipt.modifiedUser = [Utility modifiedUser];
     [[SharedReceipt sharedReceipt].receiptList addObject:receipt];
@@ -2287,4 +2293,35 @@ enum enumDiscountType
     [self removeOverlayViews];
 }
 
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets;
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0);
+    } else {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0);
+    }
+    
+    UITableView *tbvPay = (UITableView *)[_footerview viewWithTag:19];
+    tbvPay.contentInset = contentInsets;
+    tbvPay.scrollIndicatorInsets = contentInsets;
+    //    [colViewSummaryTable scrollToRowAtIndexPath:colViewSummaryTable.editingIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    UITableView *tbvPay = (UITableView *)[_footerview viewWithTag:19];
+    tbvPay.contentInset = UIEdgeInsetsZero;
+    tbvPay.scrollIndicatorInsets = UIEdgeInsetsZero;
+    
+    
+    //    NSNumber *rate = notification.userInfo[UIKeyboardAnimationDurationUserInfoKey];
+    //    [UIView animateWithDuration:rate.floatValue animations:^{
+    //        self.tableView.contentInset = // insert content inset value here
+    //        self.tableView.scrollIndicatorInsets = // insert content inset value here
+    //    }];
+}
 @end
+

@@ -7,6 +7,8 @@
 //
 
 #import "AccountInventory.h"
+#import "Utility.h"
+
 
 @implementation AccountInventory
 
@@ -22,6 +24,7 @@
         self.inOutDate = inOutDate;
         self.runningAccountReceiptHistory = runningAccountReceiptHistory;
         self.modifiedDate = modifiedDate;
+        self.modifiedUser = [Utility modifiedUser];
     }
     
     return self;

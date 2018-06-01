@@ -209,6 +209,7 @@
     compareInventoryHistory.compareInventoryHistoryID = [_strNextID integerValue];
     compareInventoryHistory.eventID = strEventID;
     compareInventoryHistory.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+    compareInventoryHistory.modifiedUser = [Utility modifiedUser];
     [compareInventoryHistoryList addObject:compareInventoryHistory];
     
     

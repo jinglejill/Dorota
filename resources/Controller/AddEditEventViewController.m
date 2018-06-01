@@ -217,7 +217,8 @@
         event.periodFrom = [Utility formatDateForDB:txtPeriodFrom.text];
         event.periodTo = [Utility formatDateForDB:txtPeriodTo.text];
         event.productSalesSetID = _productSalesSetID;
-        event.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"]; 
+        event.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        event.modifiedUser = [Utility modifiedUser];
     }
     else if([sender isEqual:btnBack])
     {

@@ -210,6 +210,7 @@
             if(![productName.name isEqualToString:productNameInitial.name])
             {
                 productName.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                productName.modifiedUser = [Utility modifiedUser];
             }
         }
     }
@@ -234,6 +235,7 @@
             productName.detail = @"";
             productName.active = cell.accessoryType == UITableViewCellAccessoryCheckmark?1:0;
             productName.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+            productName.modifiedUser = [Utility modifiedUser];
         }
         [productNameNewList addObject:productName];
     }

@@ -41,4 +41,5 @@
 
 
 + (ProductSales *)getProductSalesFromProductNameID:(NSInteger)productNameID color:(NSString *)color size:(NSString *)size productSalesSetID:(NSString *)productSalesSetID;
++(void)addProductSalesList:(NSMutableArray *)productSalesList;
 @end

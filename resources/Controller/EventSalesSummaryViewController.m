@@ -49,6 +49,68 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
 @implementation EventSalesSummaryViewController
 @synthesize colViewSummaryTable;
 @synthesize lblLocation;
+@synthesize txtStartDate;
+@synthesize txtEndDate;
+@synthesize dtPicker;
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField;
+{
+    if([textField isEqual:txtStartDate] || [textField isEqual:txtEndDate])
+    {
+        if([textField isEqual:txtStartDate])
+        {
+            NSDate *startDate = [Utility stringToDate:txtStartDate.text fromFormat:@"dd/MM/yyyy"];
+            NSDate *endDate = [Utility stringToDate:txtEndDate.text fromFormat:@"dd/MM/yyyy"];
+            NSComparisonResult result = [startDate compare:endDate];
+            if(result == NSOrderedDescending)
+            {
+                //EndDate = last date of that month
+                NSDate *startDate = [Utility stringToDate:txtStartDate.text fromFormat:@"dd/MM/yyyy"];
+                txtEndDate.text = [Utility dateToString:[Utility getEndOfMonth:startDate] toFormat:@"dd/MM/yyyy"];
+            }
+        }
+        else if([textField isEqual:txtEndDate])
+        {
+            NSDate *startDate = [Utility stringToDate:txtStartDate.text fromFormat:@"dd/MM/yyyy"];
+            NSDate *endDate = [Utility stringToDate:txtEndDate.text fromFormat:@"dd/MM/yyyy"];
+            NSComparisonResult result = [startDate compare:endDate];
+            if(result == NSOrderedDescending)
+            {
+                NSDate *endDate = [Utility stringToDate:txtEndDate.text fromFormat:@"dd/MM/yyyy"];
+                txtStartDate.text = [Utility dateToString:[Utility getFirstDateOfMonth:endDate] toFormat:@"dd/MM/yyyy"];
+            }
+        }
+    }
+    dispatch_async(dispatch_get_main_queue(),^ {
+        [self loadingOverlayView];
+    } );
+    
+    [self setDataSales];
+//    [self setDataExpenses];
+    [self removeOverlayViews];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField;
+{
+    if([textField isEqual:txtStartDate] || [textField isEqual:txtEndDate])
+    {
+        NSDate *datePeriod = [Utility stringToDate:textField.text fromFormat:@"dd/MM/yyyy"];
+        [dtPicker setDate:datePeriod];
+    }
+}
+
+- (IBAction)datePickerChanged:(id)sender
+{
+    if([txtStartDate isFirstResponder])
+    {
+        txtStartDate.text = [Utility dateToString:dtPicker.date toFormat:@"dd/MM/yyyy"];
+    }
+    else if([txtEndDate isFirstResponder])
+    {
+        txtEndDate.text = [Utility dateToString:dtPicker.date toFormat:@"dd/MM/yyyy"];
+    }
+}
 
 - (NSInteger)getCountItem:(NSInteger)receiptID
 {
@@ -73,7 +135,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         indicator.frame = CGRectMake(self.view.bounds.size.width/2-indicator.frame.size.width/2,self.view.bounds.size.height/2-indicator.frame.size.height/2,indicator.frame.size.width,indicator.frame.size.height);
     }
-
+    
     
     self.navigationItem.title = [NSString stringWithFormat:@"Event - Sales Summary"];
     lblLocation.text = [NSString stringWithFormat:@"Location: %@",[SharedSelectedEvent sharedSelectedEvent].event.location];
@@ -85,11 +147,38 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     _strEventID = [NSString stringWithFormat:@"%ld",_event.eventID];
     
     
+    
+    txtStartDate.delegate = self;
+    txtEndDate.delegate = self;
+    txtStartDate.inputView = dtPicker;
+    txtEndDate.inputView = dtPicker;
+    [dtPicker setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    [dtPicker removeFromSuperview];
+    
+    
     [self loadViewProcess];
 }
 
 - (void)loadViewProcess
 {
+    NSDate *startDate = [Utility stringToDate:_event.periodFrom fromFormat:@"yyyy-MM-dd 00:00:00"];
+    NSDate *endDate = [Utility stringToDate:_event.periodTo fromFormat:@"yyyy-MM-dd 00:00:00"];
+    NSDate *startDatePlus30Days = [Utility addDay:startDate numberOfDay:30];
+    NSComparisonResult result = [startDatePlus30Days compare:endDate];
+    if(result == NSOrderedAscending)
+    {
+        NSDate *firstDateOfCurrentDate = [Utility getFirstDateOfMonth:[Utility currentDateTime]];
+        NSDate *endDateOfCurrentDate = [Utility getEndOfMonth:[Utility currentDateTime]];
+        txtStartDate.text = [Utility dateToString:firstDateOfCurrentDate toFormat:@"dd/MM/yyyy"];
+        txtEndDate.text = [Utility dateToString:endDateOfCurrentDate toFormat:@"dd/MM/yyyy"];
+    }
+    else
+    {
+        txtStartDate.text = [Utility formatDate:_event.periodFrom fromFormat:@"yyyy-MM-dd 00:00:00" toFormat:@"dd/MM/yyyy"];
+        txtEndDate.text = [Utility formatDate:_event.periodTo fromFormat:@"yyyy-MM-dd 00:00:00" toFormat:@"dd/MM/yyyy"];
+    }
+    
+    
     if(![Utility hasEventSales:_event.eventID])
     {
         [self loadingOverlayView];
@@ -98,7 +187,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     else
     {
         [self setDataSales];
-        [self setDataExpenses];
+//        [self setDataExpenses];
     }
 }
 
@@ -112,18 +201,22 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     [[SharedProduct sharedProduct].productList addObjectsFromArray:items[i++]];
     [[SharedReceipt sharedReceipt].receiptList addObjectsFromArray:items[i++]];
     [[SharedReceiptItem sharedReceiptItem].receiptItemList addObjectsFromArray:items[i++]];
-
+    
+    
     [self setDataSales];
-    [self setDataExpenses];
+//    [self setDataExpenses];
 }
 
 -(void)setDataSales
 {
     //filter eventid
+    NSString *strStartDate = [Utility formatDate:txtStartDate.text fromFormat:@"dd/MM/yyyy" toFormat:@"yyyy-MM-dd 00:00:00"];
+    NSString *strEndDate = [Utility formatDate:txtEndDate.text fromFormat:@"dd/MM/yyyy" toFormat:@"yyyy-MM-dd 23:59:59"];
     NSMutableArray *receiptList = [SharedReceipt sharedReceipt].receiptList;
-    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"_eventID = %@",_strEventID];
+    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"_eventID = %@ and _receiptDate >= %@ and _receiptDate <= %@",_strEventID,strStartDate,strEndDate];
     NSArray *filtedArray = [receiptList filteredArrayUsingPredicate:predicate1];
     receiptList = [filtedArray mutableCopy];
+    
     
     //sort to sum sales
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_receiptDate" ascending:YES];
@@ -135,6 +228,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     NSInteger countItem = 0;
     float sumValue = 0.0f;
     NSString *previousDate = @"";
+    [_eventSalesSummaryByDateList removeAllObjects];
     for(Receipt *item in receiptList)
     {
         NSString *receiptDate = [Utility formatDate:item.receiptDate fromFormat:@"yyyy-MM-dd HH:mm:ss" toFormat:@"yyyy-MM-dd"];
@@ -169,7 +263,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         EventSalesSummaryByDate *salesSummaryByDate = [[EventSalesSummaryByDate alloc]init];
         salesSummaryByDate.date = previousDate;
         salesSummaryByDate.sumValue = [NSString stringWithFormat:@"%f", sumValue];
-        salesSummaryByDate.noOfPair = [NSString stringWithFormat:@"%ld", (long)countItem];        
+        salesSummaryByDate.noOfPair = [NSString stringWithFormat:@"%ld", (long)countItem];
         [_eventSalesSummaryByDateList addObject:salesSummaryByDate];
     }
     
@@ -278,6 +372,10 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     
     colViewSummaryTable.delegate = self;
     colViewSummaryTable.dataSource = self;
+    
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)];
+    [self.view addGestureRecognizer:tapGesture];
 }
 
 - (NSInteger)getCellNumSales
@@ -295,11 +393,11 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 3;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSInteger numberOfItems;
+    NSInteger numberOfItems=0;
     if(section == 0){numberOfItems = [self getCellNumSales];}
     else if(section == 1){numberOfItems = [self getCellNumExpenses];}
     else if(section == 2){numberOfItems = 2;}
@@ -581,8 +679,8 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-
-//    [@"No",@"Date",@"Total amount",@"Total no. of pair"];
+    
+    //    [@"No",@"Date",@"Total amount",@"Total no. of pair"];
     CGFloat width;
     NSInteger section = indexPath.section;
     
@@ -615,7 +713,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
             width = [arrSize[indexPath.item%[arrSize count]] floatValue]!=0?[arrSize[indexPath.item%[arrSize count]] floatValue]:size0;
         }
     }
-    else if(section == 1 || section == 2)
+    else
     {
         NSArray *arrSize = @[@0,@130];
         width = [arrSize[indexPath.item%[arrSize count]] floatValue];
@@ -740,9 +838,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 
 -(UILabel *)setLabelUnderline:(UILabel *)label underline:(UIView *)viewUnderline
 {
-//    CGSize expectedLabelSize = [label.text sizeWithFont:label.font constrainedToSize:label.frame.size lineBreakMode:label.lineBreakMode];
-//    
-//    
+    //    CGSize expectedLabelSize = [label.text sizeWithFont:label.font constrainedToSize:label.frame.size lineBreakMode:label.lineBreakMode];
+    //
+    //
     
     
     CGRect expectedLabelSize = [label.text boundingRectWithSize:label.frame.size
@@ -823,7 +921,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
     
     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
-//                                                              exit(0);
+                                                              //                                                              exit(0);
                                                           }];
     
     [alert addAction:defaultAction];
@@ -862,4 +960,5 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
                      }
      ];
 }
+
 @end

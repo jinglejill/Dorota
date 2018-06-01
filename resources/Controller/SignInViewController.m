@@ -150,6 +150,8 @@
         UserAccount *userAccount = [UserAccount getUserAccountByUsername:[Utility modifiedUser]];
         userAccount.deviceToken = [Utility deviceToken];
         userAccount.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        userAccount.modifiedUser = [Utility modifiedUser];
+        
         [_homeModel updateItems:dbUserAccountDeviceToken withData:userAccount];
     }
     

@@ -142,7 +142,7 @@
     dispatch_queue_t dispatchQueue;
     dispatchQueue = dispatch_queue_create("myQueue", NULL);
     [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
-    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeQRCode]];
+    [captureMetadataOutput setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypePDF417Code]];
     
     _videoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     [_videoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
@@ -160,7 +160,7 @@
     if (metadataObjects != nil && [metadataObjects count] > 0)
     {
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypeQRCode])
+        if ([[metadataObj type] isEqualToString:AVMetadataObjectTypePDF417Code])
         {
             NSString *error;
             NSString *decryptedMessage = [metadataObj stringValue];
@@ -315,16 +315,17 @@
                     
                     preOrderProduct.status = @"I";
                     preOrderProduct.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
-                    
+                    preOrderProduct.modifiedUser = [Utility modifiedUser];
                     
                     productInMain.status = @"S";
                     productInMain.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
-                    
+                    productInMain.modifiedUser = [Utility modifiedUser];
                     
                     ReceiptProductItem *receiptProductItem = [Utility getReceiptProductItem:[preOrderReceiptProductItemID integerValue]];
                     receiptProductItem.productType = @"S";
                     receiptProductItem.productID = productInMain.productID;
                     receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    receiptProductItem.modifiedUser = [Utility modifiedUser];
                     
                     
                     [_productExecuteTempList addObject:preOrderProduct];

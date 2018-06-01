@@ -39,6 +39,7 @@
     UIView *_viewUnderline;
     NSMutableArray *_arrProductSales;
     NSInteger _appRunningID;
+    NSInteger _insert;
     
 }
 @property (nonatomic,strong) NSArray        *dataSource;
@@ -136,7 +137,8 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
             if([item.editType isEqualToString:@"2"])
             {
                 NSString *strProductSalesID = [NSString stringWithFormat:@"%ld",item.productSalesID];
-                [_arrSelectedRow addObject:strProductSalesID];
+//                [_arrSelectedRow addObject:strProductSalesID];
+                [_arrSelectedRow addObject:item];
             }
         }
     }
@@ -245,6 +247,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     [self.navigationItem setLeftBarButtonItem:nil];
     
     
+    
     [self loadViewProcess];
 }
 
@@ -283,7 +286,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
             {
                 //set default value to newly added and insert to db include sharedproductsales
                 ProductSales *productSales = [[ProductSales alloc]init];
-                productSales.productSalesID = nextID+(countID++);
+                productSales.productSalesID = nextID-countID++;//nextID+(countID++);
                 productSales.productSalesSetID = @"0";
                 productSales.productNameID = selectedProductName.productNameID;
                 productSales.color = color.code;
@@ -298,6 +301,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                 productSales.imageDefault = @"";
                 productSales.imageID = @"-1";
                 productSales.modifiedDate = @"";
+                productSales.modifiedUser = [Utility modifiedUser];
                 productSales.cost = @"0";
                 
                 
@@ -313,7 +317,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                     if(![item.productSalesSetID isEqualToString:@"0"])
                     {
                         ProductSales *productSalesOther = [self copyProductSales:productSales withSetID:item.productSalesSetID];
-                        productSalesOther.productSalesID = nextID+(countID++);
+                        productSalesOther.productSalesID = nextID-(countID++);//nextID+(countID++);
                         [arrProductSales addObject:productSalesOther];
                     }
                 }
@@ -321,6 +325,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                 
                 for(ProductSales *item in arrProductSales)
                 {
+                    item.modifiedUser = [Utility modifiedUser];
                     item.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
                     
                     
@@ -331,10 +336,11 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
                         insertProductSalesList = [NSMutableArray arrayWithArray:insertProductSalesTempList];
                         [insertProductSalesTempList removeAllObjects];
                         [_homeModel insertItems:dbProductSales withData:insertProductSalesList];
+                        [self loadingOverlayView];
+                        _insert = 1;
                         
-                        
-                        //update sharedproductsales
-                        [productSalesList addObjectsFromArray:insertProductSalesList];
+//                        //update sharedproductsales
+//                        [productSalesList addObjectsFromArray:insertProductSalesList];
                     }
                 }
             }
@@ -345,10 +351,12 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
         insertProductSalesList = [NSMutableArray arrayWithArray:insertProductSalesTempList];
         [insertProductSalesTempList removeAllObjects];
         [_homeModel insertItems:dbProductSales withData:insertProductSalesList];
+        [self loadingOverlayView];
+        _insert = 1;
         
         
-        //update sharedproductsales
-        [productSalesList addObjectsFromArray:insertProductSalesList];
+//        //update sharedproductsales
+//        [productSalesList addObjectsFromArray:insertProductSalesList];
     }
     
     
@@ -455,16 +463,20 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     }
     
     
-    for(ProductSales *item in _mutArrProductNameDetailList)
+    if(!_insert)
     {
-        item.editType = @"0";
-        item.colorText = [Utility getColorName:item.color];
-        item.sizeText = [Utility getSizeLabel:item.size];
-        item.sizeOrder = [Utility getSizeOrder:item.size];
+        for(ProductSales *item in _mutArrProductNameDetailList)
+        {
+            item.editType = @"0";
+            item.colorText = [Utility getColorName:item.color];
+            item.sizeText = [Utility getSizeLabel:item.size];
+            item.sizeOrder = [Utility getSizeOrder:item.size];
+        }
+        
+        
+        [self setData];
     }
-  
-
-    [self setData];
+    
 }
 
 -(void)setData
@@ -514,6 +526,7 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     item.imageDefault = productSales.imageDefault;
     item.imageID = productSales.imageID;
     item.modifiedDate = @"";
+    item.modifiedUser = [Utility modifiedUser];
     item.cost = productSales.cost;
     return item;
 }
@@ -801,7 +814,8 @@ static NSString * const reuseFooterViewIdentifier = @"FooterView";
     ProductSales *productSales = _productNameDetailList[_selectedIndexPathForRow/countColumn-1];
     NSString *strProductSalesID = [NSString stringWithFormat:@"%ld",productSales.productSalesID];
     _arrSelectedRow = [[NSMutableArray alloc]init];
-    [_arrSelectedRow addObject:strProductSalesID];
+    [_arrSelectedRow addObject:productSales];
+//    [_arrSelectedRow addObject:strProductSalesID];
     
     
     [self performSegueWithIdentifier:@"segProductNameDetailEdit" sender:self];
@@ -1113,5 +1127,31 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
     dispatch_async(dispatch_get_main_queue(),^ {
         [self presentViewController:alert animated:YES completion:nil];
     } );
+}
+
+-(void)itemsInsertedWithReturnData:(NSArray *)items
+{
+    _insert = 0;
+    [self removeOverlayViews];
+    [ProductSales addProductSalesList:[items[0] mutableCopy]];
+    
+    
+    
+    NSMutableArray *productNameDetailList = [SharedProductSales sharedProductSales].productSalesList;
+    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"_productSalesSetID = %@ and _productNameID = %ld",@"0",selectedProductName.productNameID];
+    NSArray *filterArray = [productNameDetailList filteredArrayUsingPredicate:predicate1];
+    _mutArrProductNameDetailList = [filterArray mutableCopy];
+    
+    
+    
+    for(ProductSales *item in _mutArrProductNameDetailList)
+    {
+        item.editType = @"0";
+        item.colorText = [Utility getColorName:item.color];
+        item.sizeText = [Utility getSizeLabel:item.size];
+        item.sizeOrder = [Utility getSizeOrder:item.size];
+    }
+    
+    [self setData];
 }
 @end

@@ -141,6 +141,7 @@
         Product *product = [Product getProduct:item.productID];
         product.status = @"I";
         product.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        product.modifiedUser = [Utility modifiedUser];
         [productUpdateList addObject:product];
         
         
@@ -150,6 +151,7 @@
         Product *productDestination = filterArray[0];
         productDestination.status = @"P";
         productDestination.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        productDestination.modifiedUser = [Utility modifiedUser];
         [productUpdateList addObject:productDestination];
         
         
@@ -157,6 +159,7 @@
         receiptProductItem.preOrderEventID = event.eventID;
         receiptProductItem.productID = productDestination.productID;
         receiptProductItem.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+        receiptProductItem.modifiedUser = [Utility modifiedUser];
         [receiptProductItemList addObject:receiptProductItem];
         
         PreOrderEventIDHistory *preOrderEventIDHistory = [[PreOrderEventIDHistory alloc] initWithReceiptProductItemID:receiptProductItem.receiptProductItemID preOrderEventID:receiptProductItem.preOrderEventID];

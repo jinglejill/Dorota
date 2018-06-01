@@ -32,4 +32,10 @@
     }
     return nil;
 }
+
++(void)addProductSalesList:(NSMutableArray *)productSalesList
+{
+    NSMutableArray *dataList = [SharedProductSales sharedProductSales].productSalesList;
+    [dataList addObjectsFromArray:productSalesList];
+}
 @end

@@ -7,6 +7,8 @@
 //
 
 #import "ProductionOrder.h"
+#import "Utility.h"
+
 
 @implementation ProductionOrder
 
@@ -25,6 +27,7 @@
         self.status = status;
         self.orderDeliverDate = orderDeliverDate;
         self.modifiedDate = modifiedDate;
+        self.modifiedUser = [Utility modifiedUser];
     }
     
     return self;

@@ -153,6 +153,8 @@
             if(![color.name isEqualToString:colorInitial.name])
             {
                 color.modifiedDate = [Utility dateToString:[NSDate date] toFormat:@"yyyy-MM-dd HH:mm:ss"];
+                color.modifiedUser = [Utility modifiedUser];
+                
             }
         }        
     }
@@ -161,7 +163,8 @@
     //remove all newLabelList
     //add temp data to newlabellist
     [self convertCodeToColorID];//table นี้ใช้ code เป็น primary key เลยต้อง copy code ใส่ใน default id อันนี้ทำได้เพราะ code ที่ใช้เป็นตัวเลขเท่านั้น
-    NSInteger nextID = [Utility getNextID:tblColor];
+//    NSInteger nextID = [Utility getNextID:tblColor];
+    NSInteger intNextCode = [[self getNextCode] integerValue];
     NSMutableArray *colorNewList = [[NSMutableArray alloc]init];
     for(int i=0; i<[_newList count]; i++)
     {
@@ -170,7 +173,7 @@
         Color *color = [[Color alloc]init];
         if(cell != nil)
         {
-            color.code = [NSString stringWithFormat:@"%02ld",nextID + i];
+            color.code = [NSString stringWithFormat:@"%02ld",intNextCode + i];
             color.name = cell.textNewLabel.text;
         }
         [colorNewList addObject:color];
@@ -180,6 +183,29 @@
     //add temp data to newlabellist
     [_newList removeAllObjects];
     [_newList addObjectsFromArray:colorNewList];
+}
+- (NSString *)getNextCode
+{
+    //gen next running code
+    NSMutableArray *colorList = [SharedColor sharedColor].colorList;
+    //    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"_productCategory2 = %@",productCategory2];
+    //    NSArray *filterArray = [productCategory1List filteredArrayUsingPredicate:predicate1];
+    
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"_code" ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor1, nil];
+    NSArray *sortArray = [colorList sortedArrayUsingDescriptors:sortDescriptors];
+    colorList = [sortArray mutableCopy];
+    
+    if([colorList count] == 0)
+    {
+        return @"1";
+    }
+    else
+    {
+        Color *color = colorList[0];
+        NSInteger number = [color.code intValue];
+        return [NSString stringWithFormat:@"%02ld",number+1];
+    }
 }
 -(void)convertCodeToColorID
 {
